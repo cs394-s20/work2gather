@@ -1,4 +1,19 @@
 import React from 'react';
+
+const work2gather = {
+  title: "Work2Gather"
+};
+
+const App = () =>  (
+  <div>
+    <h1>{ work2gather.title }</h1>
+  </div>
+);
+
+export default App;
+
+/*
+import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
@@ -24,3 +39,4 @@ function App() {
 }
 
 export default App;
+*/
