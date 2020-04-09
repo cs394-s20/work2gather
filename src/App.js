@@ -7,6 +7,7 @@ const work2gather = {
 const App = () =>  (
   <div>
     <h1>{ work2gather.title }</h1>
+    <button>Click Me!</button>
   </div>
 );
 
