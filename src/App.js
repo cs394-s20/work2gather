@@ -2,7 +2,7 @@ import React from 'react';
 
 const work2gather = {
   title: "Work2Gather",
-  content: ["FY commit"]
+  content: ["First commit"]
 };
 
 const App = () =>  (
