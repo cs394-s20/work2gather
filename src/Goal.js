@@ -15,7 +15,7 @@ import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles({
     root: {
-      width: 500,
+      width: 600,
       overflow: "auto",
       margin: '100px',
       display: 'inline-block'
@@ -23,22 +23,35 @@ const useStyles = makeStyles({
     bullet: {
       display: 'inline-block',
       margin: '0 2px',
-      transform: 'scale(0.8)',
+      transform: 'scale(0.8)'
     },
     title: {
-      fontSize: 14,
+      fontSize: 14
     },
     table: {
-        border: '1px solid black'
+        tableLayout: 'auto',
+        width: '200',
+        margin: '10px'
     },
-    progressFilled:{
-      backgroundColor: 'blue',
-      borderBottom: 'none',
-      width: 7
+    tableCont:{
+      width: '300'
+    },
+    progressFilled1:{
+      backgroundColor: 'aqua',
+      borderBottom: '1px solid black',
+      borderLeft: '1px solid black',
+      width: '10%'
+    },
+     progressFilled2:{
+      backgroundColor: 'lightgreen',
+      borderBottom: '1px solid black',
+      borderLeft: '1px solid black',
+      width: '10%'
     },
     progressUnfilled:{
-      borderBottom: 'none',
-      width: 7
+      borderBottom: '1px solid black',
+      borderLeft: '1px solid black',
+      width: '10%'
     },
     pos: {
       marginBottom: 12,
@@ -50,28 +63,49 @@ const Goal = ({goal}) => {
     const bull = <span className={classes.bullet}>•</span>;
 
     const ProgressGrid = () => {
-        let rowsArray = [];
-        let cellsArray = [];
+        let user1Rows = [];
+        let user2Rows = []
+        let user1Cells = [];
+        let user2Cells = []; 
 
         for (var i = 0; i < goal['duration'] * 7; i++){
-            if(cellsArray.length < 7){
-                cellsArray.push(
+            if(user1Cells.length < 7){
+                user1Cells.push(
                     <TableCell className={goal['progress']['user1'][i] ?
-                    classes.progressFilled : classes.progressUnfilled}>
+                    classes.progressFilled1 : classes.progressUnfilled}>
+                    </TableCell>
+                );
+                user2Cells.push(
+                    <TableCell className={goal['progress']['user2'][i] ?
+                    classes.progressFilled2 : classes.progressUnfilled}>
                     </TableCell>
                 );
             } else {
-                rowsArray.push(<TableRow>{cellsArray}</TableRow>);
-                cellsArray = [];
-                cellsArray.push(
+                user1Rows.push(<TableRow>{user1Cells}</TableRow>);
+                user1Cells = [];
+                user1Cells.push(
                     <TableCell className={goal['progress']['user1'][i] ?
-                    classes.progressFilled : classes.progressUnfilled}>
+                    classes.progressFilled1 : classes.progressUnfilled}>
+                    </TableCell>
+                );
+                user2Rows.push(<TableRow>{user2Cells}</TableRow>);
+                user2Cells = [];
+                user2Cells.push(
+                    <TableCell className={goal['progress']['user2'][i] ?
+                    classes.progressFilled2 : classes.progressUnfilled}>
                     </TableCell>
                 );
             }
         }
-        rowsArray.push(<TableRow>{cellsArray}</TableRow>);
-        return (<Table className={classes.table} aria-label="simple table">{rowsArray}</Table>);
+        user1Rows.push(<TableRow>{user1Cells}</TableRow>);
+        user2Rows.push(<TableRow>{user2Cells}</TableRow>);
+
+        let table = []
+        for(let i = 0; i < user1Rows.length; i++){
+          table.push(<Table className={classes.table}> {user1Rows[i]} {user2Rows[i]} </Table>);
+        }
+
+        return (<Table className={classes.table} aria-label="simple table">{table}</Table>);
     }
 
     return (
@@ -84,9 +118,9 @@ const Goal = ({goal}) => {
           {goal['description']}
           </Typography>
           <Typography variant="body2" component="p">
-          <TableContainer component={Paper}>
-      <ProgressGrid/>
-    </TableContainer>
+          <TableContainer className={classes.tableCont} component={Paper}>
+            <ProgressGrid/>
+          </TableContainer>
           </Typography>
         </CardContent>
         <CardActions>
