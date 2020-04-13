@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import Goal from './Goal'
 
 const work2gather = {
   title: "Work2Gather",
@@ -20,8 +21,34 @@ const TaskList = ({numTasks}) => {
 };
 
 const App = () =>  {
-  
+  const [goalsJSON, setGoals] = useState({});
+  const [users, setUsers] = useState({});
   const [numTasks, setNumTasks] = useState(0);
+  var goals = Object.values(goalsJSON);
+  // var goals = {};
+  // var goal = Object.values(goalsJSON);
+  // for(var i = 0; i < inventoryKeys.length; i++){
+  //   // jsonI[inventoryKeys[i]]['sku'] = inventoryKeys[i];
+  //   inventory[inventoryKeys[i]] = inventoryJSON[inventoryKeys[i]];
+  // } 
+
+  useEffect(() => {
+    const fetchGoals = async () => {
+      const response = await fetch('./data.json');
+      const json = await response.json();
+      setGoals(json.goals);
+      
+    };
+    fetchGoals();
+    const fetchUsers = async () => {
+      const response = await fetch('./data.json');
+      const json = await response.json();
+      setUsers(json.users);
+      
+    };
+    fetchUsers();
+
+  }, []);
 
   return (
     <div>
@@ -29,6 +56,7 @@ const App = () =>  {
       <p>{work2gather.content}</p>
       <button onClick={() => setNumTasks(numTasks + 1)}>Click Me to create task!</button>
       <TaskList numTasks = {numTasks}></TaskList>
+      {goals.map(goal => <Goal goal={goal}/>)}
     </div>
   );
 }
