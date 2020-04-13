@@ -16,18 +16,42 @@
             "confirmed": true,
             "startDate": "02/01/2020",
             "endDate": "",
-            "duration": "30",
+            "duration": 2,
             "progress":{
-                "user1":{
-                    "1": true,
-                    "2": false,
-                    "3": true
-                },
-                "user2":{
-                    "1": true,
-                    "2": true,
-                    "3": false
-                }
+                "user1":
+                    [
+                        true,
+                        false,
+                        false,
+                        true,
+                        true,
+                        true,
+                        false,
+                        true,
+                        true,
+                        true,
+                        false,
+                        true,
+                        true,
+                        true
+                    ],
+                "user2":
+                    [
+                        true,
+                        false,
+                        true,
+                        false,
+                        true,
+                        true,
+                        true,
+                        true,
+                        false,
+                        true,
+                        false,
+                        true,
+                        false,
+                        true
+                    ]
             },
             "title": "Do Daily Pushups, Yay",
             "description": "Do 10 pushups a day.",
@@ -40,9 +64,42 @@
             "confirmed": false,
             "startDate": "02/01/2020",
             "endDate": "",
-            "duration": "30",
+            "duration": 2,
             "progress":{
-               
+                "user1":
+                [
+                    true,
+                    false,
+                    false,
+                    true,
+                    true,
+                    true,
+                    false,
+                    true,
+                    true,
+                    true,
+                    false,
+                    true,
+                    true,
+                    true
+                ],
+            "user2":
+                [
+                    true,
+                    false,
+                    true,
+                    false,
+                    true,
+                    true,
+                    true,
+                    true,
+                    false,
+                    true,
+                    false,
+                    true,
+                    false,
+                    true
+                ]
             },
             "title": "Read 20 Minutes Daily, Yippee",
             "description": "Let's read!",
