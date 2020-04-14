@@ -55,6 +55,7 @@ const Banner = ({ user, title }) => (
 const App = () =>  {
   const [goalsJSON, setGoals] = useState({});
   const [user, setUser] = useState(null);
+
   var goals = Object.values(goalsJSON);
 
   useEffect(() => {
@@ -84,7 +85,7 @@ const App = () =>  {
   return (
     <div>
       <Banner user={user} title="Work2Gather"></Banner>
-      {goals.map(goal => <Goal goal={goal}/>)}
+      {goals.map(goal => <Goal goal={goal} user={user}/>)}
     </div>
   );
 }
