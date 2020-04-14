@@ -18,9 +18,10 @@ const db = firebase.database().ref();
 
 const useStyles = makeStyles({
   root: {
-    width: 600,
+    width: '35%',
+    marginLeft: '10%',
     overflow: "auto",
-    margin: "100px",
+    marginTop: "50px",
     display: "inline-block",
   },
   bullet: {
@@ -33,21 +34,25 @@ const useStyles = makeStyles({
   },
   table: {
     tableLayout: "auto",
-    width: "100%",
-    marginTop: "10px",
+    width: "99.9%",
+    marginTop: '0px',
+    marginBottom: "10px",
+  },
+  marginless: {
+    margin: 0
   },
   tableCont: {
     width: "300",
   },
   progressFilled1: {
     size: "small",
-    backgroundColor: "aqua",
+    backgroundColor: '#14ECF5', //our own special blue
     border: "1px solid black",
     // width: "10%",
   },
   progressFilled2: {
     size: "small",
-    backgroundColor: "lightgreen",
+    backgroundColor: '#14F58E', //our own special red
     border: "1px solid black",
     // width: "10%",
   },
@@ -59,6 +64,14 @@ const useStyles = makeStyles({
   pos: {
     marginBottom: 12,
   },
+  ourSpecialBlue:{
+    backgroundColor: '#14ECF5', //our own special blue
+    padding: "5px"
+  },
+  ourSpecialGreen:{
+    backgroundColor: '#14F58E', //our own special red
+    padding: "5px"
+  }
 });
 
 const Goal = ({ goal, user }) => {
@@ -84,7 +97,7 @@ const Goal = ({ goal, user }) => {
 
   useEffect(() => {
     setCheckedIn(canCheckIn);
-  });
+  }, []);
 
   const makeProgress = () => {
     const onDayNum = getDayOn();
@@ -153,10 +166,13 @@ const Goal = ({ goal, user }) => {
     let table = [];
     for (let i = 0; i < user1Rows.length; i++) {
       table.push(
-        <Table className={classes.table}>
-          {" "}
-          {user1Rows[i]} {user2Rows[i]}{" "}
-        </Table>
+          <React.Fragment>
+            <p className={classes.marginless}>{"Week " + (i + 1)}</p>
+            <Table className={classes.table}>
+            {user1Rows[i]} {user2Rows[i]}
+            {" "}
+            </Table>
+        </React.Fragment>
       );
     }
 
@@ -170,23 +186,36 @@ const Goal = ({ goal, user }) => {
   return (
     <Card className={classes.root}>
       <CardContent>
-        <Typography variant="h5" component="h2">
-          {goal["title"]}
-        </Typography>
-        <Typography className={classes.pos} color="textSecondary">
-          {goal["description"]}
-        </Typography>
+        <div style={{ width: '70%', display: 'inline-block'}}>
+            <Typography variant="h5" component="h2">
+            {goal["title"]}
+            </Typography>
+            <Typography className={classes.pos} color="textSecondary">
+            {goal["description"]}
+            </Typography>
+        </div>
+        <div style={{width: '20%',  display: 'inline-block', float: 'right'}}>
+            <Table>
+                <TableRow ><TableCell className={classes.ourSpecialBlue}> {/*user.displayName.split(' ')[0]*/'Suzy Q'}</TableCell></TableRow>
+                <TableRow ><TableCell className={classes.ourSpecialGreen}> Johnny P</TableCell></TableRow>
+            </Table>
+        </div>
         <Typography variant="body2" component="p">
           <TableContainer className={classes.tableCont} component={Paper}>
             <ProgressGrid />
           </TableContainer>
         </Typography>
+  <h4 className={classes.marginless} style={{marginTop:'10px'}} align="center">Day {getDayOn()}</h4>
+          
+      {canCheckIn() ? 
+        <p align="center">You've checked in for today.  Great progress!</p> : 
+        <CardActions><Button size="small" style={{marginLeft: 'auto', marginRight:'auto'}} disabled={checkedIn} onClick={makeProgress}>
+            Check In
+            </Button>
+        </CardActions>
+      }
+        
       </CardContent>
-      <CardActions>
-        <Button size="small" disabled={checkedIn} onClick={makeProgress}>
-          Check In
-        </Button>
-      </CardActions>
     </Card>
   );
 };

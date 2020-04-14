@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+import { makeStyles } from '@material-ui/core/styles';
 import Goal from './Goal'
 import firebase from './shared/firebase'
 import AppBar from '@material-ui/core/AppBar';
@@ -20,25 +21,36 @@ const uiConfig = {
   }
 };
 
-const Welcome = ({ user }) => (
-  <AppBar position="static">
-    <Toolbar>
-      {/*<IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-        <MenuIcon />
-      </IconButton>*/}
-      <Typography variant="h6">
-        Welcome, {user.displayName}
-      </Typography>
-      <Typography variant="h6" align="center">
-        Work2Gather
-      </Typography>
-      <Button primary onClick={() => firebase.auth().signOut()}>
-        Log out
-      </Button>
-    </Toolbar>
-  </AppBar>
-);
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
+  },
+}));
 
+const Welcome = ({ user }) => {
+  const classes = useStyles();
+
+  return (
+  <React.Fragment>
+  <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" className={classes.title}>
+              {//Welcome, {user.displayName.split(' ')[0]}
+              }
+              Welcome, Suzy Q
+          </Typography>
+          <Button color="inherit" onClick={() => firebase.auth().signOut()}>Log out</Button>
+        </Toolbar>
+      </AppBar>
+  </React.Fragment>
+  );
+};
 const SignIn = () => (
   <StyledFirebaseAuth
     uiConfig={uiConfig}
@@ -73,6 +85,8 @@ const App = () =>  {
           let goals_arr = snap.val().users[user.uid].goals;
           setGoals(goals_arr.map(goal => snap.val().goals[goal]));
         } 
+      } else{
+        setGoals({});
       }
     };
     db.on('value', handleData, error => alert(error));
