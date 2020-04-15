@@ -99,7 +99,7 @@ const App = () =>  {
   return (
     <div>
       <Banner user={user} title="Work2Gather"></Banner>
-      {goals.map(goal => <Goal goal={goal} user={user}/>)}
+      {goals.map(goal => <Goal goal={goal} user={user} key={goal.key}/>)}
     </div>
   );
 }

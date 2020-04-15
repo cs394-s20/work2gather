@@ -124,6 +124,7 @@ const Goal = ({ goal, user }) => {
                 ? classes.progressFilled1
                 : classes.progressUnfilled
             }
+            key = {i}
           ></TableCell>
         );
         user2Cells.push(
@@ -133,6 +134,7 @@ const Goal = ({ goal, user }) => {
                 ? classes.progressFilled2
                 : classes.progressUnfilled
             }
+            key = {i}
           ></TableCell>
         );
       } else {
@@ -145,6 +147,7 @@ const Goal = ({ goal, user }) => {
                 ? classes.progressFilled1
                 : classes.progressUnfilled
             }
+            key = {i}
           ></TableCell>
         );
         user2Rows.push(<TableRow>{user2Cells}</TableRow>);
@@ -156,6 +159,7 @@ const Goal = ({ goal, user }) => {
                 ? classes.progressFilled2
                 : classes.progressUnfilled
             }
+            key = {i}
           ></TableCell>
         );
       }
@@ -166,20 +170,21 @@ const Goal = ({ goal, user }) => {
     let table = [];
     for (let i = 0; i < user1Rows.length; i++) {
       table.push(
-          <React.Fragment>
-            <p className={classes.marginless}>{"Week " + (i + 1)}</p>
+          <React.Fragment key={i}>
+            <Typography className={classes.marginless} variant="body2" >{"Week " + (i + 1)}</Typography>
             <Table className={classes.table}>
-            {user1Rows[i]} {user2Rows[i]}
-            {" "}
+            <TableBody>
+            {user1Rows[i]}{user2Rows[i]}
+            </TableBody>
             </Table>
         </React.Fragment>
       );
     }
 
     return (
-      <Table className={classes.table} aria-label="simple table">
+      <TableContainer className={classes.table} aria-label="simple table">
         {table}
-      </Table>
+      </TableContainer>
     );
   };
 
@@ -196,19 +201,19 @@ const Goal = ({ goal, user }) => {
         </div>
         <div style={{width: '20%',  display: 'inline-block', float: 'right'}}>
             <Table>
+                <TableBody>
                 <TableRow ><TableCell className={classes.ourSpecialBlue}> {/*user.displayName.split(' ')[0]*/'Suzy Q'}</TableCell></TableRow>
-                <TableRow ><TableCell className={classes.ourSpecialGreen}> Johnny P</TableCell></TableRow>
+                <TableRow ><TableCell className={classes.ourSpecialGreen}> {'Johnny P'}</TableCell></TableRow>
+                </TableBody>
             </Table>
         </div>
-        <Typography variant="body2" component="p">
-          <TableContainer className={classes.tableCont} component={Paper}>
-            <ProgressGrid />
-          </TableContainer>
-        </Typography>
+        <ProgressGrid />
+
+
   <h4 className={classes.marginless} style={{marginTop:'10px'}} align="center">Day {getDayOn()}</h4>
           
       {canCheckIn() ? 
-        <p align="center">You've checked in for today.  Great progress!</p> : 
+        <Typography align="center">You've checked in for today.  Great progress!</Typography> : 
         <CardActions><Button size="small" style={{marginLeft: 'auto', marginRight:'auto'}} disabled={checkedIn} onClick={makeProgress}>
             Check In
             </Button>
