@@ -122,6 +122,10 @@ const Goal = ({ goal, user }) => {
     // setCheckedIn(true);
   };
 
+  const reminder = () => {
+    alert("you have reminded your friend");
+
+  }
 
   const ProgressGrid = () => {
     let user1Rows = [];
@@ -249,14 +253,11 @@ const Goal = ({ goal, user }) => {
         max={15}
       />
 
-
-      {checkedIn ? 
-        <p align="center">You've checked in for today.  Great progress!</p> : 
-        <CardActions><Button size="small" variant="contained" color='primary' style={{marginLeft: 'auto', marginRight:'auto'}} onClick={makeProgress}>
-            Check In
-            </Button>
+        <CardActions>
+          <Button size="small" variant="contained" color='primary' style={{marginLeft: 'auto', marginRight:'auto'}} onClick={reminder}>
+            Remind Friends
+          </Button>
         </CardActions>
-      }
         
       </CardContent>
     </Card>
