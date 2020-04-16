@@ -45,7 +45,7 @@ const Welcome = ({ user }) => {
               }
               Welcome, Suzy Q
           </Typography>
-          <Button color="inherit" onClick={() => firebase.auth().signOut()}>Log out</Button>
+            {/*<Button color="inherit" onClick={() => firebase.auth().signOut()}>Log out</Button>*/}
         </Toolbar>
       </AppBar>
   </React.Fragment>
@@ -66,12 +66,12 @@ const Banner = ({ user, title }) => (
 
 const App = () =>  {
   const [goalsJSON, setGoals] = useState({});
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({'uid': 'HQrNozAtFVhlCqDDAkStjlhowtw2'});
 
   var goals = Object.values(goalsJSON);
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged(setUser);
+    // firebase.auth().onAuthStateChanged(setUser);
   }, []);
 
   useEffect(() => {
@@ -99,7 +99,10 @@ const App = () =>  {
   return (
     <div>
       <Banner user={user} title="Work2Gather"></Banner>
-      {goals.map(goal => <Goal goal={goal} user={user} key={goal.key}/>)}
+      {/*goals.map(goal => <Goal goal={goal} user={user} key={goal.key}/>)*/}
+      {console.log(' goals: '+ goals)}
+      {console.log(' goals[0]: '+ goals[0])}
+      {goals[0]? <Goal goal={goals[0]} user={user} key={goals[0].key}/> : <React.Fragment></React.Fragment>}
     </div>
   );
 }

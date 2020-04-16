@@ -13,6 +13,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import firebase from "./shared/firebase";
+import Slider from '@material-ui/core/Slider';
 
 const db = firebase.database().ref();
 
@@ -91,10 +92,10 @@ const Goal = ({ goal, user }) => {
     const onDayNum = getDayOn();
     console.log(onDayNum);
     console.log(user.uid);
-    const checkedIn = goal["progress"][user.uid][onDayNum];
+    const checkedIn = goal["progress"][user.uid][onDayNum] >= goal["minimum"];
     return checkedIn;
   };
-
+  
   useEffect(() => {
     setCheckedIn(canCheckIn);
   }, []);
@@ -107,20 +108,38 @@ const Goal = ({ goal, user }) => {
       .child(user.uid)
       .child(onDayNum)
       .set(true);
+    setCheckedIn(true);
   };
+
+  const handleSliderChange = (e, newValue) => {
+    const onDayNum = getDayOn();
+    db.child("goals")
+      .child(goal["key"])
+      .child("progress")
+      .child(user.uid)
+      .child(onDayNum)
+      .set(newValue);
+    // setCheckedIn(true);
+  };
+
 
   const ProgressGrid = () => {
     let user1Rows = [];
     let user2Rows = [];
     let user1Cells = [];
     let user2Cells = [];
+    console.log('goal["progress"]');
+
+    console.log(goal["progress"]);
+
 
     for (var i = 0; i < goal["duration"] * 7; i++) {
+      
       if (user1Cells.length < 7) {
         user1Cells.push(
           <TableCell
             className={
-              goal["progress"][user.uid][i]
+              goal["progress"][user.uid][i] >= goal["minimum"]
                 ? classes.progressFilled1
                 : classes.progressUnfilled
             }
@@ -130,7 +149,7 @@ const Goal = ({ goal, user }) => {
         user2Cells.push(
           <TableCell
             className={
-              goal["progress"]["user2"][i]
+              goal["progress"]["user2"][i] >= goal["minimum"]
                 ? classes.progressFilled2
                 : classes.progressUnfilled
             }
@@ -143,7 +162,7 @@ const Goal = ({ goal, user }) => {
         user1Cells.push(
           <TableCell
             className={
-              goal["progress"][user.uid][i]
+              goal["progress"][user.uid][i] >= goal["minimum"]
                 ? classes.progressFilled1
                 : classes.progressUnfilled
             }
@@ -155,7 +174,7 @@ const Goal = ({ goal, user }) => {
         user2Cells.push(
           <TableCell
             className={
-              goal["progress"]["user2"][i]
+              goal["progress"]["user2"][i] >= goal["minimum"]
                 ? classes.progressFilled2
                 : classes.progressUnfilled
             }
@@ -170,7 +189,7 @@ const Goal = ({ goal, user }) => {
     let table = [];
     for (let i = 0; i < user1Rows.length; i++) {
       table.push(
-          <React.Fragment key={i}>
+          <React.Fragment key={'tablefragment' + i}>
             <Typography className={classes.marginless} variant="body2" >{"Week " + (i + 1)}</Typography>
             <Table className={classes.table}>
             <TableBody>
@@ -196,7 +215,8 @@ const Goal = ({ goal, user }) => {
             {goal["title"]}
             </Typography>
             <Typography className={classes.pos} color="textSecondary">
-            {goal["description"]}
+            {goal["description"]}<br></br>
+            Started: {goal["startDate"]}
             </Typography>
         </div>
         <div style={{width: '20%',  display: 'inline-block', float: 'right'}}>
@@ -212,9 +232,27 @@ const Goal = ({ goal, user }) => {
 
   <h4 className={classes.marginless} style={{marginTop:'10px'}} align="center">Day {getDayOn()}</h4>
           
-      {canCheckIn() ? 
-        <Typography align="center">You've checked in for today.  Great progress!</Typography> : 
-        <CardActions><Button size="small" style={{marginLeft: 'auto', marginRight:'auto'}} disabled={checkedIn} onClick={makeProgress}>
+  <Typography id="discrete-slider" gutterBottom>
+        {goal['metric']}:
+        {console.log('cheese: ' + user.uid)}
+      </Typography>
+      <Slider
+        style={{width:"95%", marginLeft:"2%", float: "center"}}
+        defaultValue={5}
+        getAriaValueText={(value) => (value)}
+        aria-labelledby="discrete-slider"
+        valueLabelDisplay="auto"
+        step={1}
+        onChange={handleSliderChange}
+        marks
+        min={0}
+        max={15}
+      />
+
+
+      {checkedIn ? 
+        <p align="center">You've checked in for today.  Great progress!</p> : 
+        <CardActions><Button size="small" variant="contained" color='primary' style={{marginLeft: 'auto', marginRight:'auto'}} onClick={makeProgress}>
             Check In
             </Button>
         </CardActions>
