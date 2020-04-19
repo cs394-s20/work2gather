@@ -13,14 +13,14 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import firebase from "./shared/firebase";
-import Slider from '@material-ui/core/Slider';
+import Slider from "@material-ui/core/Slider";
 
 const db = firebase.database().ref();
 
 const useStyles = makeStyles({
   root: {
-    width: '35%',
-    marginLeft: '10%',
+    width: "35%",
+    marginLeft: "10%",
     overflow: "auto",
     marginTop: "50px",
     display: "inline-block",
@@ -36,24 +36,24 @@ const useStyles = makeStyles({
   table: {
     tableLayout: "auto",
     width: "99.9%",
-    marginTop: '0px',
+    marginTop: "0px",
     marginBottom: "10px",
   },
   marginless: {
-    margin: 0
+    margin: 0,
   },
   tableCont: {
     width: "300",
   },
   progressFilled1: {
     size: "small",
-    backgroundColor: '#14ECF5', //our own special blue
+    backgroundColor: "#14ECF5", //our own special blue
     border: "1px solid black",
     // width: "10%",
   },
   progressFilled2: {
     size: "small",
-    backgroundColor: '#14F58E', //our own special red
+    backgroundColor: "#14F58E", //our own special green
     border: "1px solid black",
     // width: "10%",
   },
@@ -65,14 +65,22 @@ const useStyles = makeStyles({
   pos: {
     marginBottom: 12,
   },
-  ourSpecialBlue:{
-    backgroundColor: '#14ECF5', //our own special blue
-    padding: "5px"
+  ourSpecialBlue: {
+    backgroundColor: "#14ECF5", //our own special blue
+    padding: "5px",
   },
-  ourSpecialGreen:{
-    backgroundColor: '#14F58E', //our own special red
-    padding: "5px"
-  }
+  ourSpecialGreen: {
+    backgroundColor: "#14F58E", //our own special red
+    padding: "5px",
+  },
+  weekDays: {
+    size: "small",
+    // border: "1px solid black",
+    borderBottom: "1px solid black",
+    paddingBottom: "0px",
+    paddingTop: "10px",
+    textAlign: "center",
+  },
 });
 
 const Goal = ({ goal, user }) => {
@@ -95,7 +103,7 @@ const Goal = ({ goal, user }) => {
     const checkedIn = goal["progress"][user.uid][onDayNum] >= goal["minimum"];
     return checkedIn;
   };
-  
+
   useEffect(() => {
     setCheckedIn(canCheckIn);
   }, []);
@@ -124,8 +132,7 @@ const Goal = ({ goal, user }) => {
 
   const reminder = () => {
     alert("you have reminded your friend");
-
-  }
+  };
 
   const ProgressGrid = () => {
     let user1Rows = [];
@@ -136,9 +143,7 @@ const Goal = ({ goal, user }) => {
 
     console.log(goal["progress"]);
 
-
     for (var i = 0; i < goal["duration"] * 7; i++) {
-      
       if (user1Cells.length < 7) {
         user1Cells.push(
           <TableCell
@@ -147,7 +152,7 @@ const Goal = ({ goal, user }) => {
                 ? classes.progressFilled1
                 : classes.progressUnfilled
             }
-            key = {i}
+            key={i}
           ></TableCell>
         );
         user2Cells.push(
@@ -157,7 +162,7 @@ const Goal = ({ goal, user }) => {
                 ? classes.progressFilled2
                 : classes.progressUnfilled
             }
-            key = {i}
+            key={i}
           ></TableCell>
         );
       } else {
@@ -170,7 +175,7 @@ const Goal = ({ goal, user }) => {
                 ? classes.progressFilled1
                 : classes.progressUnfilled
             }
-            key = {i}
+            key={i}
           ></TableCell>
         );
         user2Rows.push(<TableRow>{user2Cells}</TableRow>);
@@ -182,7 +187,7 @@ const Goal = ({ goal, user }) => {
                 ? classes.progressFilled2
                 : classes.progressUnfilled
             }
-            key = {i}
+            key={i}
           ></TableCell>
         );
       }
@@ -191,15 +196,30 @@ const Goal = ({ goal, user }) => {
     user2Rows.push(<TableRow>{user2Cells}</TableRow>);
 
     let table = [];
+    let daysOfTheWeek = (
+      <TableRow>
+        <TableCell className={classes.weekDays}>Su</TableCell>
+        <TableCell className={classes.weekDays}>M</TableCell>
+        <TableCell className={classes.weekDays}>T</TableCell>
+        <TableCell className={classes.weekDays}>W</TableCell>
+        <TableCell className={classes.weekDays}>Th</TableCell>
+        <TableCell className={classes.weekDays}>F</TableCell>
+        <TableCell className={classes.weekDays}>Sa</TableCell>
+      </TableRow>
+    );
     for (let i = 0; i < user1Rows.length; i++) {
       table.push(
-          <React.Fragment key={'tablefragment' + i}>
-            <Typography className={classes.marginless} variant="body2" >{"Week " + (i + 1)}</Typography>
-            <Table className={classes.table}>
+        <React.Fragment key={"tablefragment" + i}>
+          <Typography className={classes.marginless} variant="body2">
+            {"Week " + (i + 1)}
+          </Typography>
+          <Table className={classes.table}>
             <TableBody>
-            {user1Rows[i]}{user2Rows[i]}
+              {daysOfTheWeek}
+              {user1Rows[i]}
+              {user2Rows[i]}
             </TableBody>
-            </Table>
+          </Table>
         </React.Fragment>
       );
     }
@@ -214,51 +234,71 @@ const Goal = ({ goal, user }) => {
   return (
     <Card className={classes.root}>
       <CardContent>
-        <div style={{ width: '70%', display: 'inline-block'}}>
-            <Typography variant="h5" component="h2">
+        <div style={{ width: "70%", display: "inline-block" }}>
+          <Typography variant="h5" component="h2">
             {goal["title"]}
-            </Typography>
-            <Typography className={classes.pos} color="textSecondary">
-            {goal["description"]}<br></br>
+          </Typography>
+          <Typography className={classes.pos} color="textSecondary">
+            {goal["description"]}
+            <br></br>
             Started: {goal["startDate"]}
-            </Typography>
+          </Typography>
         </div>
-        <div style={{width: '20%',  display: 'inline-block', float: 'right'}}>
-            <Table>
-                <TableBody>
-                <TableRow ><TableCell className={classes.ourSpecialBlue}> {/*user.displayName.split(' ')[0]*/'Suzy Q'}</TableCell></TableRow>
-                <TableRow ><TableCell className={classes.ourSpecialGreen}> {'Johnny P'}</TableCell></TableRow>
-                </TableBody>
-            </Table>
+        <div style={{ width: "20%", display: "inline-block", float: "right" }}>
+          <Table>
+            <TableBody>
+              <TableRow>
+                <TableCell className={classes.ourSpecialBlue}>
+                  {" "}
+                  {/*user.displayName.split(' ')[0]*/ "Suzy Q"}
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className={classes.ourSpecialGreen}>
+                  {" "}
+                  {"Johnny P"}
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
         </div>
         <ProgressGrid />
 
+        <h4
+          className={classes.marginless}
+          style={{ marginTop: "10px" }}
+          align="center"
+        >
+          Day {getDayOn()}
+        </h4>
 
-  <h4 className={classes.marginless} style={{marginTop:'10px'}} align="center">Day {getDayOn()}</h4>
-          
-  <Typography id="discrete-slider" gutterBottom>
-        {goal['metric']}:
-        {console.log('cheese: ' + user.uid)}
-      </Typography>
-      <Slider
-        style={{width:"95%", marginLeft:"2%", float: "center"}}
-        defaultValue={5}
-        getAriaValueText={(value) => (value)}
-        aria-labelledby="discrete-slider"
-        valueLabelDisplay="auto"
-        step={1}
-        onChange={handleSliderChange}
-        marks
-        min={0}
-        max={15}
-      />
+        <Typography id="discrete-slider" gutterBottom>
+          {goal["metric"]}:{console.log("cheese: " + user.uid)}
+        </Typography>
+        <Slider
+          style={{ width: "95%", marginLeft: "2%", float: "center" }}
+          defaultValue={5}
+          getAriaValueText={(value) => value}
+          aria-labelledby="discrete-slider"
+          valueLabelDisplay="auto"
+          step={1}
+          onChange={handleSliderChange}
+          marks
+          min={0}
+          max={15}
+        />
 
         <CardActions>
-          <Button size="small" variant="contained" color='primary' style={{marginLeft: 'auto', marginRight:'auto'}} onClick={reminder}>
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            style={{ marginLeft: "auto", marginRight: "auto" }}
+            onClick={reminder}
+          >
             Remind Friends
           </Button>
         </CardActions>
-        
       </CardContent>
     </Card>
   );
