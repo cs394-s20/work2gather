@@ -15,6 +15,9 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import 'date-fns';
+import DateFnsUtils from '@date-io/date-fns';
+import {MuiPickersUtilsProvider,KeyboardDatePicker,} from '@material-ui/pickers';
 
 const db = firebase.database().ref();
 
@@ -74,6 +77,7 @@ const Banner = ({ user, title }) => (
 const AddGoal = ({open,setOpen}) => {
   const [title, setTitle] = useState();
   const [description, setDescription] = useState();
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [duration, setDuration] = useState();
 
   const handleClose = () => {
@@ -83,6 +87,10 @@ const AddGoal = ({open,setOpen}) => {
   const handleSubmit = () => {
     handleClose();
   }
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
 
   return (
     <Dialog open={open} onClose={handleClose}>
@@ -101,6 +109,20 @@ const AddGoal = ({open,setOpen}) => {
         fullWidth
         onChange={event=>setDescription(event.target.value)}
       />
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <KeyboardDatePicker
+
+          format="MM/dd/yyyy"
+          margin="normal"
+          label="Goal Start Date"
+          value={selectedDate}
+          onChange={handleDateChange}
+          fullWidth
+          KeyboardButtonProps={{
+            'aria-label': 'change date',
+          }}
+        />
+      </MuiPickersUtilsProvider>
       <TextField
         margin="dense"
         label="Goal Duration"
@@ -115,9 +137,6 @@ const AddGoal = ({open,setOpen}) => {
       <Button onClick={handleSubmit}>
         Submit
       </Button>
-      {console.log(title)}
-      {console.log(description)}
-      {console.log(duration)}
     </DialogActions>
     </Dialog>
   )
