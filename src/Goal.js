@@ -15,6 +15,7 @@ import Paper from "@material-ui/core/Paper";
 import firebase from "./shared/firebase";
 import Slider from "@material-ui/core/Slider";
 import { TextField } from "@material-ui/core";
+import Container from "@material-ui/core/Container";
 
 const db = firebase.database().ref();
 
@@ -306,23 +307,18 @@ const Goal = ({ goal, user }) => {
         <Typography id="discrete-slider" gutterBottom>
           {goal["metric"]}:{console.log("cheese: " + user.uid)}
         </Typography>
-        <TextField
-          id="outlined-basic"
-          label="Outlined"
-          variant="outlined"
-          type="number"
-          onChange={saveProgress}
-          defaultValue={progress}
-        />
-        <Button
-          size="small"
-          variant="contained"
-          color="primary"
-          style={{ marginLeft: "auto", marginRight: "auto" }}
-          onClick={updateProgress}
-        >
-          Update Progress
-        </Button>
+        <Container style={{ marginLeft: "auto", marginRight: "auto" }}>
+          {/* {" "} */}
+          <TextField
+            id="outlined-basic"
+            label="Outlined"
+            variant="outlined"
+            type="number"
+            onChange={saveProgress}
+            defaultValue={progress}
+          />
+        </Container>
+
         {/* <Slider
           style={{ width: "95%", marginLeft: "2%", float: "center" }}
           defaultValue={5}
@@ -337,6 +333,15 @@ const Goal = ({ goal, user }) => {
         /> */}
 
         <CardActions>
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            style={{ marginLeft: "auto", marginRight: "auto" }}
+            onClick={updateProgress}
+          >
+            Update Progress
+          </Button>
           <Button
             size="small"
             variant="contained"
