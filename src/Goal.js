@@ -82,6 +82,7 @@ const useStyles = makeStyles({
     paddingBottom: "0px",
     paddingTop: "10px",
     textAlign: "center",
+    width: "50px"
   },
 });
 
@@ -317,6 +318,15 @@ const Goal = ({ goal, user }) => {
             onChange={saveProgress}
             defaultValue={progress}
           />
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            style={{ width: "70px", float: "right", marginTop: "30px"}}
+            onClick={reminder}
+          >
+            Remind Friends
+          </Button>
         </Container>
 
         {/* <Slider
@@ -333,24 +343,17 @@ const Goal = ({ goal, user }) => {
         /> */}
 
         <CardActions>
-          <Button
-            size="small"
+        <Button
+            size="medium"
             variant="contained"
             color="primary"
-            style={{ marginLeft: "auto", marginRight: "auto" }}
+            // style={{ marginLeft: "auto", marginRight: "auto" }}
+            style={{ marginTop : "5px", marginLeft: "23.5px"}}
             onClick={updateProgress}
           >
             Update Progress
           </Button>
-          <Button
-            size="small"
-            variant="contained"
-            color="primary"
-            style={{ marginLeft: "auto", marginRight: "auto" }}
-            onClick={reminder}
-          >
-            Remind Friends
-          </Button>
+          
         </CardActions>
       </CardContent>
     </Card>
