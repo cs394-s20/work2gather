@@ -14,6 +14,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import firebase from "./shared/firebase";
 import Slider from "@material-ui/core/Slider";
+import { TextField } from "@material-ui/core";
 
 const db = firebase.database().ref();
 
@@ -84,6 +85,7 @@ const useStyles = makeStyles({
 });
 
 const Goal = ({ goal, user }) => {
+  const [progress, setProgress] = useState(0);
   const [checkedIn, setCheckedIn] = useState(false);
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
@@ -104,8 +106,37 @@ const Goal = ({ goal, user }) => {
     return checkedIn;
   };
 
+  const getProgress = () => {
+    const onDayNum = getDayOn();
+    const checkedIn = goal["progress"][user.uid][onDayNum];
+    return checkedIn;
+  };
+
+  const saveProgress = (event, value) => {
+    console.log(event.target.value);
+    setProgress(event.target.value);
+  };
+
+  const updateProgress = (event, value) => {
+    console.log(progress);
+    console.log(typeof progress);
+    const onDayNum = getDayOn();
+    if (progress === "") {
+      alert("Not a number");
+    } else {
+      db.child("goals")
+        .child(goal["key"])
+        .child("progress")
+        .child(user.uid)
+        .child(onDayNum)
+        .set(parseInt(progress));
+      setCheckedIn(true);
+    }
+  };
+
   useEffect(() => {
-    setCheckedIn(canCheckIn);
+    // setCheckedIn(canCheckIn);
+    setProgress(getProgress);
   }, []);
 
   const makeProgress = () => {
@@ -275,7 +306,24 @@ const Goal = ({ goal, user }) => {
         <Typography id="discrete-slider" gutterBottom>
           {goal["metric"]}:{console.log("cheese: " + user.uid)}
         </Typography>
-        <Slider
+        <TextField
+          id="outlined-basic"
+          label="Outlined"
+          variant="outlined"
+          type="number"
+          onChange={saveProgress}
+          defaultValue={progress}
+        />
+        <Button
+          size="small"
+          variant="contained"
+          color="primary"
+          style={{ marginLeft: "auto", marginRight: "auto" }}
+          onClick={updateProgress}
+        >
+          Update Progress
+        </Button>
+        {/* <Slider
           style={{ width: "95%", marginLeft: "2%", float: "center" }}
           defaultValue={5}
           getAriaValueText={(value) => value}
@@ -286,7 +334,7 @@ const Goal = ({ goal, user }) => {
           marks
           min={0}
           max={15}
-        />
+        /> */}
 
         <CardActions>
           <Button
