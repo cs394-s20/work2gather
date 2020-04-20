@@ -8,6 +8,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
+import MaxWidthDialog from "./SeeMore"
 
 const db = firebase.database().ref();
 
@@ -67,6 +68,7 @@ const Banner = ({ user, title }) => (
 const App = () =>  {
   const [goalsJSON, setGoals] = useState({});
   const [user, setUser] = useState({'uid': 'HQrNozAtFVhlCqDDAkStjlhowtw2'});
+  const [seeMore, setSeeMore] = useState(false); 
 
   var goals = Object.values(goalsJSON);
 
@@ -97,13 +99,16 @@ const App = () =>  {
 
 
   return (
-    <div>
-      <Banner user={user} title="Work2Gather"></Banner>
-      {/*goals.map(goal => <Goal goal={goal} user={user} key={goal.key}/>)*/}
-      {console.log(' goals: '+ goals)}
-      {console.log(' goals[0]: '+ goals[0])}
-      {goals[0]? <Goal goal={goals[0]} user={user} key={goals[0].key}/> : <React.Fragment></React.Fragment>}
-    </div>
+    <React.Fragment>
+      <div>
+        <Banner user={user} title="Work2Gather"></Banner>
+        {/*goals.map(goal => <Goal goal={goal} user={user} key={goal.key}/>)*/}
+        {console.log(' goals: '+ goals)}
+        {console.log(' goals[0]: '+ goals[0])}
+        {goals[0]? <Goal goal={goals[0]} user={user} key={goals[0].key}/> : <React.Fragment></React.Fragment>}
+      </div>
+       <MaxWidthDialog />
+    </React.Fragment>
   );
 }
 
