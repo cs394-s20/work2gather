@@ -230,13 +230,13 @@ const Goal = ({ goal, user }) => {
     let table = [];
     let daysOfTheWeek = (
       <TableRow>
-        <TableCell className={classes.weekDays}>Su</TableCell>
-        <TableCell className={classes.weekDays}>M</TableCell>
-        <TableCell className={classes.weekDays}>T</TableCell>
-        <TableCell className={classes.weekDays}>W</TableCell>
-        <TableCell className={classes.weekDays}>Th</TableCell>
-        <TableCell className={classes.weekDays}>F</TableCell>
-        <TableCell className={classes.weekDays}>Sa</TableCell>
+        <TableCell className={classes.weekDays}>SUN</TableCell>
+        <TableCell className={classes.weekDays}>MON</TableCell>
+        <TableCell className={classes.weekDays}>TUE</TableCell>
+        <TableCell className={classes.weekDays}>WED</TableCell>
+        <TableCell className={classes.weekDays}>THU</TableCell>
+        <TableCell className={classes.weekDays}>FRI</TableCell>
+        <TableCell className={classes.weekDays}>SAT</TableCell>
       </TableRow>
     );
     for (let i = 0; i < user1Rows.length; i++) {
