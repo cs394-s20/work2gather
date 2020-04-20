@@ -9,16 +9,13 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-<<<<<<< HEAD
 import MaxWidthDialog from "./SeeMore"
-=======
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
->>>>>>> d3959ae3b3e8804ec080afcd5e537634cea910ef
 
 const db = firebase.database().ref();
 
