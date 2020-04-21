@@ -25,7 +25,12 @@ const AddGoal = ({open, user, setOpen}) => {
     const handleSubmit = () => {
       //add date to goals
       console.log(typeof(selectedDate));
-      console.log(Object.values(selectedDate));
+
+      var dt = selectedDate.toLocaleString('en-US', { timeZone: 'America/Chicago' })
+      console.log(selectedDate);
+      var myJSON = JSON.stringify(dt);
+      console.log(myJSON);
+      var timeNow = myJSON.split("\"")[1].split(",")[0]
 
       var myRef = db.child("goals").push();
       var key = myRef.key;
@@ -42,7 +47,7 @@ const AddGoal = ({open, user, setOpen}) => {
         progress: {
           0: false
         },
-        // startDate: Object.values(selectedDate),
+        startDate: timeNow,
         title: title
       }
     
