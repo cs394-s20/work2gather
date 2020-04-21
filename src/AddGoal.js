@@ -34,6 +34,8 @@ const AddGoal = ({open, user, setOpen}) => {
 
       var myRef = db.child("goals").push();
       var key = myRef.key;
+
+      console.log(typeof(user.uid))
     
       var newData={
         confirmed: true,
@@ -44,9 +46,16 @@ const AddGoal = ({open, user, setOpen}) => {
           creator: "123"
         },
         key: key,
+        metric: "sth",
         progress: {
-          0: false
+          [user.uid]:{
+            0: 1
+          },
+          user2: {
+            0: 1
+          }
         },
+        minimum: 10,
         startDate: timeNow,
         title: title
       }

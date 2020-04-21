@@ -11,6 +11,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MaxWidthDialog from "./SeeMore"
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import AddGoal from './AddGoal';
+import Container from '@material-ui/core/Container';
 
 const db = firebase.database().ref();
 
@@ -101,25 +102,48 @@ const App = () =>  {
     return () => { db.off('value', handleData); };
   }, [user]);
 
+  // const allGoal = Object.values(snap.val().users[user.uid].goals);
+
   return (
     <div>
-      <Banner user={user} title="Work2Gather"></Banner>
+      <Banner user={user} title="Work2Gather">
+      </Banner>
       <Grid container direction="row" justify="flex-end">
-      <Grid item>
-      <IconButton color="primary" onClick={handleOpen}>
-        <AddCircleIcon fontSize="large"/>
-      </IconButton>
-      </Grid>
+        <Grid item>
+          <IconButton color="primary" onClick={handleOpen}>
+            <AddCircleIcon fontSize="large"/>
+          </IconButton>
+        </Grid>
       </Grid>
       <AddGoal open={open} user={user} setOpen={setOpen}/>
       {/*goals.map(goal => <Goal goal={goal} user={user} key={goal.key}/>)*/}
       {console.log(' goals: '+ goals)}
       {console.log(' goals[0]: '+ goals[0])}
-      {goals[0]? <Goal goal={goals[0]} user={user} key={goals[0].key}/> : <React.Fragment></React.Fragment>}
-      {goals[1]? <Goal goal={goals[1]} user={user} key={goals[1].key}/> : <React.Fragment></React.Fragment>}
+      {/* {goals[0]? <Goal goal={goals[0]} user={user} key={goals[0].key}/> : <React.Fragment></React.Fragment>}
+      {goals[1]? <Goal goal={goals[1]} user={user} key={goals[1].key}/> : <React.Fragment></React.Fragment>} */}
+      <div float = "left" style={{float: "left"}}>
+        <Container maxWidth = "lg">
+          <GoalGrid goals = {goals} user = {user}/>
+        </Container>
+      </div>
       <MaxWidthDialog />
     </div>
   );
 }
+
+
+const GoalGrid = ({goals, user}) => {
+  const classes = useStyles();
+  return (
+    <div className={classes.gird} style={{width: "120%"}}>
+      <Grid container spacing={5} justify = "center">
+        {Object.values(goals).map(goals => 
+          <Goal goal={goals} user={user} key={goals.key}/> 
+        )}
+      </Grid>
+    </div>
+  );
+};
+
 
 export default App;
