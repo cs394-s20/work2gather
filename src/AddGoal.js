@@ -12,7 +12,7 @@ import firebase from './shared/firebase'
 
 const db = firebase.database().ref();
 
-const AddGoal = ({open,setOpen}) => {
+const AddGoal = ({open, user, setOpen}) => {
     const [title, setTitle] = useState();
     const [description, setDescription] = useState();
     const [selectedDate, setSelectedDate] = useState(new Date());
@@ -46,14 +46,13 @@ const AddGoal = ({open,setOpen}) => {
         title: title
       }
     
-      myRef.push(newData);
+      myRef.update(newData);
 
       //add date to goals
-      
-      // db.child("users")
-      //   .child(user.id)
-      //   .child("goals")
-      //   .push();
+      db.child("users")
+        .child(user.uid)
+        .child("goals")
+        .push(key);
 
       handleClose();
     }

@@ -91,7 +91,7 @@ const App = () =>  {
           let user_goals = [];
           console.log(user_goals)
           let goals_arr = snap.val().users[user.uid].goals;
-          setGoals(goals_arr.map(goal => snap.val().goals[goal]));
+          setGoals(Object.values(goals_arr).map(goal => snap.val().goals[goal]));
         } 
       } else{
         setGoals({});
@@ -111,7 +111,7 @@ const App = () =>  {
       </IconButton>
       </Grid>
       </Grid>
-      <AddGoal open={open} setOpen={setOpen}/>
+      <AddGoal open={open} user={user} setOpen={setOpen}/>
       {/*goals.map(goal => <Goal goal={goal} user={user} key={goal.key}/>)*/}
       {console.log(' goals: '+ goals)}
       {console.log(' goals[0]: '+ goals[0])}
