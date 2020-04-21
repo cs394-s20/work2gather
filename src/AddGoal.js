@@ -8,6 +8,9 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import {MuiPickersUtilsProvider,KeyboardDatePicker,} from '@material-ui/pickers';
+import firebase from './shared/firebase'
+
+const db = firebase.database().ref();
 
 const AddGoal = ({open,setOpen}) => {
     const [title, setTitle] = useState();
@@ -20,6 +23,30 @@ const AddGoal = ({open,setOpen}) => {
     }
   
     const handleSubmit = () => {
+      //add date to goals
+      console.log(typeof(selectedDate));
+      console.log(Object.values(selectedDate));
+
+      var myRef = db.child("goals").push();
+      var key = myRef.key;
+    
+      var newData={
+        confirmed: true,
+        description: description,
+        duration: duration,
+        endDate: "",
+        groupMembers:{
+          creator: "123"
+        },
+        key: key,
+        progress: {
+          0: false
+        },
+        // startDate: Object.values(selectedDate),
+        title: title
+      }
+    
+      myRef.push(newData);
       handleClose();
     }
   
