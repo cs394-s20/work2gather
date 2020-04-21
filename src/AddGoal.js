@@ -47,6 +47,14 @@ const AddGoal = ({open,setOpen}) => {
       }
     
       myRef.push(newData);
+
+      //add date to goals
+      
+      // db.child("users")
+      //   .child(user.id)
+      //   .child("goals")
+      //   .push();
+
       handleClose();
     }
   
