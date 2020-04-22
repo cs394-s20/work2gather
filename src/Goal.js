@@ -16,13 +16,16 @@ import firebase from "./shared/firebase";
 import Slider from "@material-ui/core/Slider";
 import { TextField } from "@material-ui/core";
 import Container from "@material-ui/core/Container";
+import MaxWidthDialog from "./SeeMore"
+
 
 const db = firebase.database().ref();
 
 const useStyles = makeStyles({
   root: {
-    width: "35%",
-    marginLeft: "10%",
+    maxWidth: "65%",
+    marginLeft: "5%",
+    marginRight: "5%",
     overflow: "auto",
     marginTop: "50px",
     display: "inline-block",
@@ -83,6 +86,16 @@ const useStyles = makeStyles({
     paddingTop: "10px",
     textAlign: "center",
     width: "50px"
+  },
+   onDays: {
+    size: "small",
+    // border: "1px solid black",
+    borderBottom: "1px solid black",
+    paddingBottom: "0px",
+    paddingTop: "10px",
+    textAlign: "center",
+    width: "50px",
+    backgroundColor: "#14ECF5"
   },
 });
 
@@ -229,15 +242,18 @@ const Goal = ({ goal, user }) => {
     user2Rows.push(<TableRow>{user2Cells}</TableRow>);
 
     let table = [];
+    let today = new Date();
+    let dateNum = today.getUTCDay();
+
     let daysOfTheWeek = (
       <TableRow>
-        <TableCell className={classes.weekDays}>SUN</TableCell>
-        <TableCell className={classes.weekDays}>MON</TableCell>
-        <TableCell className={classes.weekDays}>TUE</TableCell>
-        <TableCell className={classes.weekDays}>WED</TableCell>
-        <TableCell className={classes.weekDays}>THU</TableCell>
-        <TableCell className={classes.weekDays}>FRI</TableCell>
-        <TableCell className={classes.weekDays}>SAT</TableCell>
+        <TableCell className={dateNum == 0 ? classes.onDays : classes.weekDays}>SUN</TableCell>
+        <TableCell className={dateNum == 1 ? classes.onDays : classes.weekDays}>MON</TableCell>
+        <TableCell className={dateNum == 2 ? classes.onDays : classes.weekDays}>TUE</TableCell>
+        <TableCell className={dateNum == 3 ? classes.onDays : classes.weekDays}>WED</TableCell>
+        <TableCell className={dateNum == 4 ? classes.onDays : classes.weekDays}>THU</TableCell>
+        <TableCell className={dateNum == 5 ? classes.onDays : classes.weekDays}>FRI</TableCell>
+        <TableCell className={dateNum == 6 ? classes.onDays : classes.weekDays}>SAT</TableCell>
       </TableRow>
     );
     for (let i = 0; i < user1Rows.length; i++) {
@@ -352,9 +368,9 @@ const Goal = ({ goal, user }) => {
             onClick={updateProgress}
           >
             Update Progress
-          </Button>
-          
+          </Button>          
         </CardActions>
+        <MaxWidthDialog goal={goal}/>
       </CardContent>
     </Card>
   );

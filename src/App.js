@@ -8,7 +8,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
-import MaxWidthDialog from "./SeeMore"
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import AddGoal from './AddGoal';
 import Container from '@material-ui/core/Container';
@@ -126,7 +125,6 @@ const App = () =>  {
           <GoalGrid goals = {goals} user = {user}/>
         </Container>
       </div>
-      <MaxWidthDialog />
     </div>
   );
 }

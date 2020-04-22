@@ -17,6 +17,7 @@ const AddGoal = ({open, user, setOpen}) => {
     const [description, setDescription] = useState();
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [duration, setDuration] = useState();
+    const [metric, setMetric] = useState("Metric");
   
     const handleClose = () => {
       setOpen(false);
@@ -46,7 +47,7 @@ const AddGoal = ({open, user, setOpen}) => {
           creator: "123"
         },
         key: key,
-        metric: "sth",
+        metric: metric,
         progress: {
           [user.uid]:{
             0: 1
@@ -106,6 +107,12 @@ const AddGoal = ({open, user, setOpen}) => {
             }}
           />
         </MuiPickersUtilsProvider>
+        <TextField
+          margin="dense"
+          label="Goal Metric"
+          fullWidth
+          onChange={event=>setMetric(event.target.value)}
+        />
         <TextField
           margin="dense"
           label="Goal Duration"

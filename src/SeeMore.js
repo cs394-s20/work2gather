@@ -39,29 +39,29 @@ const useStyles = makeStyles((theme) => ({
 
 const data = [
   {
-    name: '1', uv: 4000, pv: 2400, 
+    name: '1', uv: 40, pv: 24, 
   },
   {
-    name: '2', uv: 3000, pv: 1398, 
+    name: '2', uv: 30, pv: 13, 
   },
   {
-    name: '3', uv: 2000, pv: 9800,
+    name: '3', uv: 20, pv: 98,
   },
   {
-    name: '4', uv: 2780, pv: 3908, 
+    name: '4', uv: 27, pv: 39, 
   },
   {
-    name: '5', uv: 1890, pv: 4800, 
+    name: '5', uv: 18, pv: 48, 
   },
   {
-    name: '6', uv: 2390, pv: 3800, 
+    name: '6', uv: 23, pv: 38, 
   },
   {
-    name: '7', uv: 3490, pv: 4300, 
+    name: '7', uv: 90, pv: 43, 
   },
 ];
 
-export default function MaxWidthDialog() {
+export default function MaxWidthDialog({ goal }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -76,9 +76,16 @@ export default function MaxWidthDialog() {
 
   return (
     <React.Fragment>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Open max-width dialog
+     <div>
+     <div style={{float: 'right'}}>
+      <Button  variant="outlined" color="primary" onClick={handleClickOpen}>
+      See More
       </Button>
+      </div>
+      <div>
+      </div>
+      </div>
+
       <Dialog
         fullWidth={true}
         maxWidth={"md"}
@@ -86,10 +93,10 @@ export default function MaxWidthDialog() {
         onClose={handleClose}
         aria-labelledby="max-width-dialog-title"
       >
-        <DialogTitle id="max-width-dialog-title">Do Daily Pushups, Yay</DialogTitle>
+        <DialogTitle id="max-width-dialog-title">{goal.title}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-          	Do 10 pushups a day.
+          	{goal.description}
           </DialogContentText>
           <div>
            <div style={{float:'left'}}>
@@ -109,7 +116,7 @@ export default function MaxWidthDialog() {
 			<XAxis dataKey="name">
 		   		<Label value="Days" offset={0} position="bottom" />
 		  	</XAxis>  			
-		  	<YAxis className={classes.yaxis} label={{ value: 'Pushups', angle: -90, position: 'left'}} />
+		  	<YAxis className={classes.yaxis} label={{ value: goal.metric, angle: -90, position: 'left'}} />
 	        <Tooltip />
   			<Legend verticalAlign="top" height={36}/>
 	        <Line name="Suzy Q." type="monotone" dataKey="uv" stroke="#8884d8" activeDot={{ r: 8 }} />
