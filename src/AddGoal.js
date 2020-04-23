@@ -24,8 +24,9 @@ const useStyles = makeStyles((theme) => ({
 const AddGoal = ({open, user, setOpen}) => {
     const [title, setTitle] = useState();
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const [duration, setDuration] = useState();
     const [metric, setMetric] = useState();
+    const [minimum, setMinimum] = useState();
+    const [duration, setDuration] = useState();
     const classes = useStyles();
 
     const handleOpen = () => {
@@ -36,16 +37,19 @@ const AddGoal = ({open, user, setOpen}) => {
       setOpen(false);
       setTitle();
       setSelectedDate(new Date());
-      setDuration();
       setMetric();
+      setMinimum();
+      setDuration();
     }
   
     const handleSubmit = () => {
       //add date to goals
       console.log(title);
       console.log(metric);
+      console.log(minimum);
       console.log(duration);
-      if(title===undefined||duration===undefined||metric===undefined)
+      if(title===undefined||metric===undefined||minimum===undefined||duration===undefined
+        ||title===""||metric===""||minimum===""||duration==="")
       {
         alert("Please fill all fields");
       }
@@ -74,7 +78,7 @@ const AddGoal = ({open, user, setOpen}) => {
             creator: user.uid,
             invitee: "user2"
           },
-          minimum: 10,
+          minimum: minimum,
           metric: metric,
           progress: {
             [user.uid]:{
@@ -143,10 +147,18 @@ const AddGoal = ({open, user, setOpen}) => {
         />
         <TextField
           margin="dense"
+          label="Daily Minimum"
+          fullWidth
+          onChange={event=>setMinimum(event.target.value)}
+          placeholder="Minimum for each day needed to complete your goal"
+          type="number"
+        />
+        <TextField
+          margin="dense"
           label="Goal Duration"
           fullWidth
           onChange={event=>setDuration(event.target.value)}
-          placeholder="how many weeks will you perform the goal(i.e. # of weeks)"
+          placeholder="how many weeks will you perform your goal(i.e. # of weeks)"
           type="number"
         />
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
