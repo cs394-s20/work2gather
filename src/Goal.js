@@ -17,13 +17,15 @@ import Slider from "@material-ui/core/Slider";
 import { TextField } from "@material-ui/core";
 import Container from "@material-ui/core/Container";
 import MaxWidthDialog from "./SeeMore"
+import clsx from 'clsx';
 
 
 const db = firebase.database().ref();
 
-const useStyles = makeStyles({
+  const useStyles = makeStyles({
   root: {
     maxWidth: "65%",
+    minWidth: "50%",
     marginLeft: "5%",
     marginRight: "5%",
     overflow: "auto",
@@ -97,13 +99,56 @@ const useStyles = makeStyles({
     width: "50px",
     backgroundColor: "#14ECF5"
   },
+  shape1: {
+    backgroundColor: "#14ECF5",
+    opacity: 0.5,
+
+  },
+  shape2: {
+    backgroundColor: "#14F58E",
+    opacity: 0.5,
+  },
+  shapeCircle: {
+    borderRadius: '50%',
+  },
 });
 
 const Goal = ({ goal, user }) => {
   const [progress, setProgress] = useState(0);
   const [checkedIn, setCheckedIn] = useState(false);
+  const [circle1Ref, setCircle1Ref] = useState(React.createRef());
+  const [circle2Ref, setCircle2Ref] = useState(React.createRef());
+  const [circle1Left, setCircle1Left] = useState(0);
+  const [circle1Top, setCircle1Top] = useState(0);
+  const [circle2Left, setCircle2Left] = useState(0);
+  const [circle2Top, setCircle2Top] = useState(0);
+  const [circle1Radius, setCircle1Radius] = useState(0);
+  const [circle2Radius, setCircle2Radius] = useState(0);
+  const [fullCardRef, setFullCardRef] = useState(React.createRef());
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
+
+
+  useEffect(() => {
+    // setCheckedIn(canCheckIn);
+    setProgress(getProgress);
+    // console.log("label uno: " +  circle1Ref.current.offsetWidth)
+    // console.log("lebelo doso: " + circle2Ref.current.offsetWidth)
+    // console.log("lebelo treso: " + fullCardRef.current.offsetWidth)
+    const fullCardWidth = fullCardRef.current.offsetWidth;
+    const fullCardHeight = fullCardRef.current.offsetHeight;
+    const circle1Radius = (fullCardWidth*0.10) * (goal["progress"][user.uid][getDayOn()] / goal["minimum"])
+    console.log("lebelo cinco: " + goal["progress"][user.uid][getDayOn()])
+    console.log("lebelo sixo: " + goal["progress"]['minimum'])
+
+    const circle2Radius = (fullCardWidth) * (goal["progress"]["user2"][getDayOn()] / goal['minimum'])
+    setCircle1Radius(circle1Radius);
+    setCircle2Radius(circle2Radius);
+    setCircle1Left(fullCardWidth / 2 - circle1Radius / 2);
+    setCircle1Top(fullCardHeight / 2 - circle1Radius / 2);
+    setCircle2Left(fullCardWidth / 2 - circle2Radius / 2);
+    setCircle2Top(fullCardHeight / 2 - circle2Radius / 2);
+  }, [goal]);
 
   const getDayOn = () => {
     var startdate = new Date(goal["startDate"]);
@@ -148,11 +193,6 @@ const Goal = ({ goal, user }) => {
       setCheckedIn(true);
     }
   };
-
-  useEffect(() => {
-    // setCheckedIn(canCheckIn);
-    setProgress(getProgress);
-  }, []);
 
   const makeProgress = () => {
     const onDayNum = getDayOn();
@@ -282,7 +322,10 @@ const Goal = ({ goal, user }) => {
 
   return (
     <Card className={classes.root}>
-      <CardContent>
+      <CardContent ref={fullCardRef} style={{position: "relative"}}>
+      <div ref={circle1Ref} style={{overflow: "visible", position: "absolute", left: circle1Left, top:circle1Top, width: circle1Radius, height: circle1Radius}} className={clsx(classes.shape1, classes.shapeCircle)} />
+      <div ref={circle2Ref} style={{overflow: "visible", position: "absolute", left: circle2Left, top:circle2Top, width: circle2Radius, height: circle2Radius}} className={clsx(classes.shape2, classes.shapeCircle)} />
+
         <div style={{ width: "70%", display: "inline-block" }}>
           <Typography variant="h5" component="h2">
             {goal["title"]}
@@ -311,7 +354,7 @@ const Goal = ({ goal, user }) => {
             </TableBody>
           </Table>
         </div>
-        <ProgressGrid />
+        {/*<ProgressGrid />*/}
 
         <h4
           className={classes.marginless}
