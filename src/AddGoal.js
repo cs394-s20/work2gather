@@ -14,7 +14,6 @@ const db = firebase.database().ref();
 
 const AddGoal = ({open, user, setOpen}) => {
     const [title, setTitle] = useState();
-    const [description, setDescription] = useState();
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [duration, setDuration] = useState();
     const [metric, setMetric] = useState("Metric");
@@ -25,51 +24,56 @@ const AddGoal = ({open, user, setOpen}) => {
   
     const handleSubmit = () => {
       //add date to goals
-      console.log(typeof(selectedDate));
-
-      var dt = selectedDate.toLocaleString('en-US', { timeZone: 'America/Chicago' })
-      console.log(selectedDate);
-      var myJSON = JSON.stringify(dt);
-      console.log(myJSON);
-      var timeNow = myJSON.split("\"")[1].split(",")[0]
-
-      var myRef = db.child("goals").push();
-      var key = myRef.key;
-
-      console.log(typeof(user.uid))
-    
-      var newData={
-        confirmed: true,
-        description: description,
-        duration: duration,
-        endDate: "",
-        groupMembers:{
-          creator: "123"
-        },
-        key: key,
-        metric: metric,
-        progress: {
-          [user.uid]:{
-            0: 1
-          },
-          user2: {
-            0: 1
-          }
-        },
-        minimum: 10,
-        startDate: timeNow,
-        title: title
+      if(title===undefined||duration===undefined||metric===undefined)
+      {
+        alert("Please fill all fields");
       }
-    
-      myRef.update(newData);
+      else{
+        console.log(typeof(selectedDate));
 
-      //add date to goals
-      db.child("users")
-        .child(user.uid)
-        .child("goals")
-        .push(key);
-
-      handleClose();
+        var dt = selectedDate.toLocaleString('en-US', { timeZone: 'America/Chicago' })
+        console.log(selectedDate);
+        var myJSON = JSON.stringify(dt);
+        console.log(myJSON);
+        var timeNow = myJSON.split("\"")[1].split(",")[0]
+  
+        var myRef = db.child("goals").push();
+        var key = myRef.key;
+  
+        console.log(typeof(user.uid))
+      
+        var newData={
+          confirmed: true,
+          duration: duration,
+          endDate: "",
+          groupMembers:{
+            creator: "123"
+          },
+          key: key,
+          metric: metric,
+          progress: {
+            [user.uid]:{
+              0: 1
+            },
+            user2: {
+              0: 1
+            }
+          },
+          minimum: 10,
+          startDate: timeNow,
+          title: title
+        }
+      
+        myRef.update(newData);
+  
+        //add date to goals
+        db.child("users")
+          .child(user.uid)
+          .child("goals")
+          .push(key);
+  
+        handleClose();
+      }
     }
   
     const handleDateChange = (date) => {
@@ -86,12 +90,21 @@ const AddGoal = ({open, user, setOpen}) => {
           label="Goal Title"
           fullWidth
           onChange={event=>setTitle(event.target.value)}
+          placeholder="What will you do every day to reach your goal (i.e. 10 pushups a day)"
         />
         <TextField
           margin="dense"
-          label="Goal Description"
+          label="Goal Metric"
           fullWidth
-          onChange={event=>setDescription(event.target.value)}
+          onChange={event=>setMetric(event.target.value)}
+          placeholder="Unit(i.e. # of pushups)"
+        />
+        <TextField
+          margin="dense"
+          label="Goal Duration"
+          fullWidth
+          onChange={event=>setDuration(event.target.value)}
+          placeholder="how many weeks will you perform the goal(i.e. # of weeks)"
         />
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <KeyboardDatePicker
@@ -107,19 +120,12 @@ const AddGoal = ({open, user, setOpen}) => {
             }}
           />
         </MuiPickersUtilsProvider>
-        <TextField
-          margin="dense"
-          label="Goal Metric"
-          fullWidth
-          onChange={event=>setMetric(event.target.value)}
-        />
-        <TextField
-          margin="dense"
-          label="Goal Duration"
-          fullWidth
-          onChange={event=>setDuration(event.target.value)}
-        />
       </DialogContent>
+      <DialogActions>
+        <Button disabled={true}>
+          Invite your friends
+        </Button>
+      </DialogActions>
       <DialogActions>
         <Button onClick={handleClose}>
           Cancel
