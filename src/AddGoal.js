@@ -1,10 +1,13 @@
 import React,{useState} from 'react'
 import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { makeStyles } from '@material-ui/core/styles';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import {MuiPickersUtilsProvider,KeyboardDatePicker,} from '@material-ui/pickers';
@@ -12,12 +15,23 @@ import firebase from './shared/firebase'
 
 const db = firebase.database().ref();
 
+const useStyles = makeStyles((theme) => ({
+  button: {
+    marginTop: 5,
+  }
+}));
+
 const AddGoal = ({open, user, setOpen}) => {
     const [title, setTitle] = useState();
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [duration, setDuration] = useState();
     const [metric, setMetric] = useState("Metric");
-  
+    const classes = useStyles();
+
+    const handleOpen = () => {
+      setOpen(true);
+    }
+
     const handleClose = () => {
       setOpen(false);
     }
@@ -81,6 +95,21 @@ const AddGoal = ({open, user, setOpen}) => {
     };
   
     return (
+      <React.Fragment>
+      <Grid container direction="row" justify="center">
+      <Grid item>
+        <Button
+          className={classes.button}
+          variant="contained"
+          color="primary"
+          startIcon={<AddCircleIcon fontSize="large"/>}
+          size="large"
+          onClick={handleOpen}
+        >
+          Add a new goal
+        </Button>
+      </Grid>
+      </Grid>
       <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Create a new goal</DialogTitle>
       <DialogContent>
@@ -135,6 +164,7 @@ const AddGoal = ({open, user, setOpen}) => {
         </Button>
       </DialogActions>
       </Dialog>
+      </React.Fragment>
     )
 }
 

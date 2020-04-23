@@ -7,8 +7,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
 import AddGoal from './AddGoal';
 import Container from '@material-ui/core/Container';
 
@@ -107,13 +105,6 @@ const App = () =>  {
     <div>
       <Banner user={user} title="Work2Gather">
       </Banner>
-      <Grid container direction="row" justify="flex-end">
-        <Grid item>
-          <IconButton color="primary" onClick={handleOpen}>
-            <AddCircleIcon fontSize="large"/>
-          </IconButton>
-        </Grid>
-      </Grid>
       <AddGoal open={open} user={user} setOpen={setOpen}/>
       {/*goals.map(goal => <Goal goal={goal} user={user} key={goal.key}/>)*/}
       {console.log(' goals: '+ goals)}
