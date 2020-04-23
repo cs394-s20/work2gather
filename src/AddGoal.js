@@ -58,12 +58,16 @@ const AddGoal = ({open, user, setOpen}) => {
       
         var newData={
           confirmed: true,
-          duration: duration,
-          endDate: "",
-          groupMembers:{
-            creator: "123"
-          },
           key: key,
+          title: title,
+          startDate: timeNow,
+          duration: duration,
+          // endDate: "",
+          groupMembers:{
+            creator: user.uid,
+            invitee: "user2"
+          },
+          minimum: 10,
           metric: metric,
           progress: {
             [user.uid]:{
@@ -72,20 +76,22 @@ const AddGoal = ({open, user, setOpen}) => {
             user2: {
               0: 1
             }
-          },
-          minimum: 10,
-          startDate: timeNow,
-          title: title
+          }
         }
       
         myRef.update(newData);
   
-        //add date to goals
+        //add goals to creator
         db.child("users")
           .child(user.uid)
           .child("goals")
           .push(key);
   
+        //add goal to invitee
+        db.child("users")
+        .child("user2")
+        .child("invites")
+        .push(key);
         handleClose();
       }
     }
