@@ -69,10 +69,6 @@ const App = () =>  {
   const [goalsJSON, setGoals] = useState({});
   const [user, setUser] = useState({'uid': 'HQrNozAtFVhlCqDDAkStjlhowtw2'});
   const [open, setOpen] = useState(false);
-  
-  const handleOpen = () => {
-    setOpen(true);
-  }
 
   var goals = Object.values(goalsJSON);
 
