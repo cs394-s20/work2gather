@@ -25,7 +25,7 @@ const AddGoal = ({open, user, setOpen}) => {
     const [title, setTitle] = useState();
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [duration, setDuration] = useState();
-    const [metric, setMetric] = useState("Metric");
+    const [metric, setMetric] = useState();
     const classes = useStyles();
 
     const handleOpen = () => {
@@ -34,10 +34,17 @@ const AddGoal = ({open, user, setOpen}) => {
 
     const handleClose = () => {
       setOpen(false);
+      setTitle();
+      setSelectedDate(new Date());
+      setDuration();
+      setMetric();
     }
   
     const handleSubmit = () => {
       //add date to goals
+      console.log(title);
+      console.log(metric);
+      console.log(duration);
       if(title===undefined||duration===undefined||metric===undefined)
       {
         alert("Please fill all fields");
@@ -134,6 +141,7 @@ const AddGoal = ({open, user, setOpen}) => {
           fullWidth
           onChange={event=>setDuration(event.target.value)}
           placeholder="how many weeks will you perform the goal(i.e. # of weeks)"
+          type="number"
         />
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <KeyboardDatePicker
