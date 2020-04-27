@@ -24,13 +24,13 @@ const db = firebase.database().ref();
 
   const useStyles = makeStyles({
   root: {
-    maxWidth: "65%",
-    minWidth: "50%",
-    marginLeft: "5%",
-    marginRight: "5%",
-    overflow: "auto",
+    // maxWidth: "65%",
+    // minWidth: "35%",
+    // marginLeft: "5%",
+    // marginRight: "5%",
+    // overflow: "auto",
     marginTop: "50px",
-    display: "inline-block",
+    // display: "inline-block",
   },
   bullet: {
     display: "inline-block",

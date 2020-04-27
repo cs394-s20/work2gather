@@ -33,6 +33,9 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
+  grid:{
+    marginBottom: -60
+  }
 }));
 
 const Welcome = ({ user }) => {
@@ -112,26 +115,39 @@ const App = () =>  {
       {console.log(' goals[0]: '+ goals[0])}
       {/* {goals[0]? <Goal goal={goals[0]} user={user} key={goals[0].key}/> : <React.Fragment></React.Fragment>}
       {goals[1]? <Goal goal={goals[1]} user={user} key={goals[1].key}/> : <React.Fragment></React.Fragment>} */}
-      <div float = "left" style={{float: "left"}}>
-        <Container maxWidth = "lg">
-          <GoalGrid goals = {goals} user = {user}/>
-        </Container>
-      </div>
+      <Container maxWidth = "xl">
+        <GoalGrid goals = {goals} user = {user}/>
+      </Container>
     </div>
   );
 }
 
 
 const GoalGrid = ({goals, user}) => {
-  const classes = useStyles();
-  return (
-    <div className={classes.gird} style={{width: "120%"}}>
-      <Grid container spacing={5} justify = "center">
-        {Object.values(goals).map(goals => 
+  let classes = useStyles();
+  let unfinished = [];
+  let pending = [];
+  Object.values(goals).map(goals => goals.confirmed? unfinished.push(goals):pending.push(goals))
+
+  return ( 
+      <React.Fragment>
+      <Grid container spacing={3} direction="row" justify = "flex-start">
+      <Grid item xs={12} className={classes.grid}><Typography variant="h4">Unfinished Goals</Typography></Grid>
+        {unfinished.map(goals => 
+        <Grid item xs={4}>
           <Goal goal={goals} user={user} key={goals.key}/> 
+        </Grid>
         )}
       </Grid>
-    </div>
+      <Grid container spacing={3} direction="row" justify = "flex-start">
+      <Grid item xs={12} className={classes.grid}><Typography variant="h4">Pending Goals</Typography></Grid>
+        {pending.map(goals => 
+        <Grid item xs={4}>
+          <Goal goal={goals} user={user} key={goals.key}/> 
+        </Grid>
+        )}
+      </Grid>
+      </React.Fragment>
   );
 };
 
