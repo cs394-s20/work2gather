@@ -111,6 +111,12 @@ const db = firebase.database().ref();
   shapeCircle: {
     borderRadius: '50%',
   },
+  goalCircle: {
+    backgroundColor: "white",
+  },
+  backCircle: {
+    backgroundColor: "black", 
+  },
 });
 
 const Goal = ({ goal, user }) => {
@@ -120,10 +126,22 @@ const Goal = ({ goal, user }) => {
   const [circle2Ref, setCircle2Ref] = useState(React.createRef());
   const [circle1Left, setCircle1Left] = useState(0);
   const [circle1Top, setCircle1Top] = useState(0);
+  const [circle1Radius, setCircle1Radius] = useState(0);
+  
   const [circle2Left, setCircle2Left] = useState(0);
   const [circle2Top, setCircle2Top] = useState(0);
-  const [circle1Radius, setCircle1Radius] = useState(0);
   const [circle2Radius, setCircle2Radius] = useState(0);
+  
+  const [goalCircleRef, setGoalCircleRef] = useState(React.createRef());
+  const [goalCircleLeft, setGoalCircleLeft] = useState(0);
+  const [goalCircleTop, setGoalCircleTop] = useState(0);
+  const [goalCircleRadius, setGoalCircleRadius] = useState(0);
+
+  const [backCircleRef, setBackCircleRef] = useState(React.createRef());
+  const [backCircleLeft, setBackCircleLeft] = useState(0);
+  const [backCircleTop, setBackCircleTop] = useState(0);
+  const [backCircleRadius, setBackCircleRadius] = useState(0);
+
   const [fullCardRef, setFullCardRef] = useState(React.createRef());
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
@@ -137,17 +155,27 @@ const Goal = ({ goal, user }) => {
     // console.log("lebelo treso: " + fullCardRef.current.offsetWidth)
     const fullCardWidth = fullCardRef.current.offsetWidth;
     const fullCardHeight = fullCardRef.current.offsetHeight;
-    const circle1Radius = (fullCardWidth*0.10) * (goal["progress"][user.uid][getDayOn()] / goal["minimum"])
+    const circle1Radius = (fullCardWidth*0.30) * (goal["progress"][user.uid][getDayOn()] / goal["minimum"])
     console.log("lebelo cinco: " + goal["progress"][user.uid][getDayOn()])
     console.log("lebelo sixo: " + goal["progress"]['minimum'])
+    const goalRadius =  fullCardWidth * 0.3;
+    const backRadius = fullCardWidth * 0.31; 
 
-    const circle2Radius = (fullCardWidth) * (goal["progress"]["user2"][getDayOn()] / goal['minimum'])
+    setBackCircleRadius(backRadius)
+    setBackCircleTop(0) 
+    setBackCircleLeft(fullCardWidth / 2 - backRadius / 2)
+
+    setGoalCircleRadius(goalRadius);
+    setGoalCircleTop(0 - goalRadius / 2 + backRadius / 2) 
+    setGoalCircleLeft(fullCardWidth / 2 - goalRadius / 2)
+
+    const circle2Radius = (fullCardWidth * 0.3) * (goal["progress"]["user2"][getDayOn()] / goal['minimum'])
     setCircle1Radius(circle1Radius);
     setCircle2Radius(circle2Radius);
     setCircle1Left(fullCardWidth / 2 - circle1Radius / 2);
-    setCircle1Top(fullCardHeight / 2 - circle1Radius / 2);
+    setCircle1Top(0 - circle1Radius / 2 + backRadius / 2);
     setCircle2Left(fullCardWidth / 2 - circle2Radius / 2);
-    setCircle2Top(fullCardHeight / 2 - circle2Radius / 2);
+    setCircle2Top(0 - circle2Radius / 2 + backRadius / 2);
   }, [goal]);
 
   const getDayOn = () => {
@@ -322,10 +350,7 @@ const Goal = ({ goal, user }) => {
 
   return (
     <Card className={classes.root}>
-      <CardContent ref={fullCardRef} style={{position: "relative"}}>
-      <div ref={circle1Ref} style={{overflow: "visible", position: "absolute", left: circle1Left, top:circle1Top, width: circle1Radius, height: circle1Radius}} className={clsx(classes.shape1, classes.shapeCircle)} />
-      <div ref={circle2Ref} style={{overflow: "visible", position: "absolute", left: circle2Left, top:circle2Top, width: circle2Radius, height: circle2Radius}} className={clsx(classes.shape2, classes.shapeCircle)} />
-
+      <CardContent>
         <div style={{ width: "70%", display: "inline-block" }}>
           <Typography variant="h5" component="h2">
             {goal["title"]}
@@ -353,6 +378,12 @@ const Goal = ({ goal, user }) => {
               </TableRow>
             </TableBody>
           </Table>
+        </div>
+        <div ref={fullCardRef} style={{position: "relative", height: backCircleRadius * 1.05, width: '100%'}}>
+            <div style={{overflow: "visible", position: "absolute", left: backCircleLeft, top:backCircleTop, width: backCircleRadius, height: backCircleRadius}} className={clsx(classes.backCircle, classes.shapeCircle)} />
+            <div ref={goalCircleRef} style={{overflow: "visible", position: "absolute", left: goalCircleLeft, top:goalCircleTop, width: goalCircleRadius, height: goalCircleRadius}} className={clsx(classes.goalCircle, classes.shapeCircle)} />
+            <div ref={circle1Ref} style={{overflow: "visible", position: "absolute", left: circle1Left, top:circle1Top, width: circle1Radius, height: circle1Radius}} className={clsx(classes.shape1, classes.shapeCircle)} />
+            <div ref={circle2Ref} style={{overflow: "visible", position: "absolute", left: circle2Left, top:circle2Top, width: circle2Radius, height: circle2Radius}} className={clsx(classes.shape2, classes.shapeCircle)} />      
         </div>
         {/*<ProgressGrid />*/}
 
