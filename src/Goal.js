@@ -147,7 +147,6 @@ const Goal = ({ goal, user }) => {
   const bull = <span className={classes.bullet}>•</span>;
 
   useEffect(() => {
-    console.log("updating goal " + goal.key )
     let users = Object.keys(goal["progress"]);
     for(let j = 0; j <= getDayOn(); j++){
       if(goal["progress"][users[0]][j] == undefined){
