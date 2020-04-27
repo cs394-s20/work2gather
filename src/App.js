@@ -44,10 +44,13 @@ const Welcome = ({ user }) => {
     <React.Fragment>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" className={classes.title}>
-            Welcome, {user.displayName}
+          <Typography variant="h5" className={classes.title}>
+              Work2Gather
           </Typography>
-          <Button color="inherit" onClick={() => firebase.auth().signOut()}>
+          <Typography variant="h6" style={{float:"center", marginRight: 30}}>
+            Welcome, {user.displayName ? user.displayName.split(' ')[0] : ""}
+          </Typography>
+          <Button style={{fontSize:21}} color="inherit" onClick={() => firebase.auth().signOut()}>
             Log out
           </Button>
         </Toolbar>
