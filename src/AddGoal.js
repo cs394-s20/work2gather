@@ -28,7 +28,6 @@ const AddGoal = ({open, user, setOpen, emailTouid}) => {
     const [minimum, setMinimum] = useState();
     const [duration, setDuration] = useState();
     const [email, setEmail] = useState();
-    const [invite, setInvite] = useState(false)
     const classes = useStyles();
 
     const handleOpen = () => {
@@ -43,7 +42,6 @@ const AddGoal = ({open, user, setOpen, emailTouid}) => {
       setMinimum();
       setDuration();
       setEmail();
-      setInvite(false);
     }
   
     const handleSubmit = () => {
@@ -57,82 +55,73 @@ const AddGoal = ({open, user, setOpen, emailTouid}) => {
       {
         alert("Please fill all fields");
       }
-      else if(invite===false)
-      {
-        alert("You didn't click on the 'invite your friends' button to check the email address or you invited an invalid user.")
-      }
       else{
-        console.log(typeof(selectedDate));
-
-        var dt = selectedDate.toLocaleString('en-US', { timeZone: 'America/Chicago' })
-        console.log(selectedDate);
-        var myJSON = JSON.stringify(dt);
-        console.log(myJSON);
-        var timeNow = myJSON.split("\"")[1].split(",")[0]
-  
-        var myRef = db.child("goals").push();
-        var key = myRef.key;
-  
-        console.log(typeof(user.uid))
-      
-        var newData={
-          confirmed: true,
-          key: key,
-          title: title,
-          startDate: timeNow,
-          duration: duration,
-          // endDate: "",
-          groupMembers:{
-            creator: user.uid,
-            invitee: "user2"
-          },
-          minimum: minimum,
-          metric: metric,
-          progress: {
-            [user.uid]:{
-              0: 1
-            },
-            user2: {
-              0: 1
-            }
+        let rg = /\./g;
+        let temp = email.replace(rg,',');
+        if(!emailTouid[temp]) 
+          {
+            alert('The user does not exist');
           }
-        }
+        else 
+          {
+            alert('success');
+            console.log(typeof(selectedDate));
+
+            var dt = selectedDate.toLocaleString('en-US', { timeZone: 'America/Chicago' })
+            console.log(selectedDate);
+            var myJSON = JSON.stringify(dt);
+            console.log(myJSON);
+            var timeNow = myJSON.split("\"")[1].split(",")[0]
       
-        myRef.update(newData);
-  
-        //add goals to creator
-        db.child("users")
-          .child(user.uid)
-          .child("goals")
-          .push(key);
-  
-        //add goal to invitee
-        db.child("users")
-        .child("user2")
-        .child("invites")
-        .push(key);
-        handleClose();
+            var myRef = db.child("goals").push();
+            var key = myRef.key;
+      
+            console.log(typeof(user.uid))
+          
+            var newData={
+              confirmed: false,
+              key: key,
+              title: title,
+              startDate: timeNow,
+              duration: duration,
+              // endDate: "",
+              groupMembers:{
+                creator: user.uid,
+                invitee: "user2"
+              },
+              minimum: minimum,
+              metric: metric,
+              progress: {
+                [user.uid]:{
+                  0: 1
+                },
+                user2: {
+                  0: 1
+                }
+              }
+            }
+          
+            myRef.update(newData);
+      
+            //add goals to creator
+            db.child("users")
+              .child(user.uid)
+              .child("goals")
+              .push(key);
+      
+            //add goal to invitee
+            db.child("users")
+            .child("user2")
+            .child("invites")
+            .push(key);
+            handleClose();
+          }
       }
     }
   
     const handleDateChange = (date) => {
       setSelectedDate(date);
     };
-  
-    const checkEmail = () => {
-      let rg = /\./g;
-      let temp = email.replace(rg,',');
-      if(emailTouid[temp]) 
-        {
-          alert('Success!');
-          setInvite(true);
-        }
-      else 
-        {
-          alert('The user does not exist');
-          setInvite(false);
-        }
-    }
 
     return (
       <React.Fragment>
@@ -206,11 +195,6 @@ const AddGoal = ({open, user, setOpen, emailTouid}) => {
           placeholder="input the email of your friend"
         />
       </DialogContent>
-      <DialogActions>
-        <Button onClick={checkEmail}>
-          Invite your friends
-        </Button>
-      </DialogActions>
       <DialogActions>
         <Button onClick={handleClose}>
           Cancel
