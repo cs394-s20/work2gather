@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import { makeStyles } from '@material-ui/core/styles';
 import Goal from './Goal'
+import AddGoal from './AddGoal';
 import firebase from './shared/firebase'
 import Button from '@material-ui/core/Button';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import AddGoal from './AddGoal';
 import Container from '@material-ui/core/Container';
 
 const db = firebase.database().ref();
@@ -84,19 +84,20 @@ const App = () =>  {
     const handleData = snap => {
       console.log(user)
       if (user){
-        console.log(user)
         if (snap.val()){
-          let user_goals = [];
-          console.log(user_goals)
-          let goals_arr = snap.val().users[user.uid].goals;
-          setGoals(Object.values(goals_arr).map(goal => snap.val().goals[goal]));
+          db.child("users").child(user.uid).child("name").set(user.displayName);
           setEmailTouid(snap.val().emailTouid);
+          let re = /\./gi;
+          let email = user.email.replace(re, ',')
+          db.child('emailTouid/' + email).set(user.uid);
+          if (snap.val().users[user.uid].goals) {
+            let goals_arr = snap.val().users[user.uid].goals;
+            setGoals(Object.values(goals_arr).map(goal => snap.val().goals[goal]));
+          }
         } 
-        let re = /\./gi;
-        let email = user.email.replace(re,',')
-        db.child('emailTouid/'+email).set(user.uid);
       } else{
         setGoals({});
+        setEmailTouid({});
       }
     };
     db.on('value', handleData, error => alert(error));
