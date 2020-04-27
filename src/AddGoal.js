@@ -21,12 +21,14 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const AddGoal = ({open, user, setOpen}) => {
+const AddGoal = ({open, user, setOpen, emailTouid}) => {
     const [title, setTitle] = useState();
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [metric, setMetric] = useState();
     const [minimum, setMinimum] = useState();
     const [duration, setDuration] = useState();
+    const [email, setEmail] = useState();
+    const [invite, setInvite] = useState(false)
     const classes = useStyles();
 
     const handleOpen = () => {
@@ -40,6 +42,8 @@ const AddGoal = ({open, user, setOpen}) => {
       setMetric();
       setMinimum();
       setDuration();
+      setEmail();
+      setInvite(false);
     }
   
     const handleSubmit = () => {
@@ -48,10 +52,14 @@ const AddGoal = ({open, user, setOpen}) => {
       console.log(metric);
       console.log(minimum);
       console.log(duration);
-      if(title===undefined||metric===undefined||minimum===undefined||duration===undefined
-        ||title===""||metric===""||minimum===""||duration==="")
+      if(title===undefined||metric===undefined||minimum===undefined||duration===undefined||email===undefined
+        ||title===""||metric===""||minimum===""||duration===""||email==="")
       {
         alert("Please fill all fields");
+      }
+      else if(invite===false)
+      {
+        alert("You didn't click on the 'invite your friends' button to check the email address or you invited an invalid user.")
       }
       else{
         console.log(typeof(selectedDate));
@@ -111,6 +119,21 @@ const AddGoal = ({open, user, setOpen}) => {
       setSelectedDate(date);
     };
   
+    const checkEmail = () => {
+      let rg = /\./g;
+      let temp = email.replace(rg,',');
+      if(emailTouid[temp]) 
+        {
+          alert('Success!');
+          setInvite(true);
+        }
+      else 
+        {
+          alert('The user does not exist');
+          setInvite(false);
+        }
+    }
+
     return (
       <React.Fragment>
       <Grid container direction="row" justify="center">
@@ -175,9 +198,16 @@ const AddGoal = ({open, user, setOpen}) => {
             }}
           />
         </MuiPickersUtilsProvider>
+        <TextField
+          margin="dense"
+          label="Invite your friend"
+          fullWidth
+          onChange={event=>setEmail(event.target.value)}
+          placeholder="input the email of your friend"
+        />
       </DialogContent>
       <DialogActions>
-        <Button disabled={true}>
+        <Button onClick={checkEmail}>
           Invite your friends
         </Button>
       </DialogActions>

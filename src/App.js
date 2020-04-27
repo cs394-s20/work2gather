@@ -3,6 +3,7 @@ import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import { makeStyles } from '@material-ui/core/styles';
 import Goal from './Goal'
 import firebase from './shared/firebase'
+import Button from '@material-ui/core/Button';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -36,17 +37,16 @@ const useStyles = makeStyles((theme) => ({
 
 const Welcome = ({ user }) => {
   const classes = useStyles();
-
   return (
   <React.Fragment>
   <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-              {//Welcome, {user.displayName.split(' ')[0]}
-              }
-              Welcome, Suzy Q
+              Welcome, {user.displayName}
           </Typography>
-            {/*<Button color="inherit" onClick={() => firebase.auth().signOut()}>Log out</Button>*/}
+          <Button color="inherit" onClick={() => firebase.auth().signOut()}>
+            Log out
+          </Button>
         </Toolbar>
       </AppBar>
   </React.Fragment>
@@ -67,13 +67,14 @@ const Banner = ({ user, title }) => (
 
 const App = () =>  {
   const [goalsJSON, setGoals] = useState({});
-  const [user, setUser] = useState({'uid': 'HQrNozAtFVhlCqDDAkStjlhowtw2'});
+  const [user, setUser] = useState({});
+  const [emailTouid, setEmailTouid] = useState({});
   const [open, setOpen] = useState(false);
 
   var goals = Object.values(goalsJSON);
 
   useEffect(() => {
-    // firebase.auth().onAuthStateChanged(setUser);
+    firebase.auth().onAuthStateChanged(setUser);
   }, []);
 
   useEffect(() => {
@@ -86,7 +87,11 @@ const App = () =>  {
           console.log(user_goals)
           let goals_arr = snap.val().users[user.uid].goals;
           setGoals(Object.values(goals_arr).map(goal => snap.val().goals[goal]));
+          setEmailTouid(snap.val().emailTouid);
         } 
+        let re = /\./gi;
+        let email = user.email.replace(re,',')
+        db.child('emailTouid/'+email).set(user.uid);
       } else{
         setGoals({});
       }
@@ -101,7 +106,7 @@ const App = () =>  {
     <div>
       <Banner user={user} title="Work2Gather">
       </Banner>
-      <AddGoal open={open} user={user} setOpen={setOpen}/>
+      {user?<AddGoal open={open} user={user} setOpen={setOpen} emailTouid={emailTouid}/>:null}
       {/*goals.map(goal => <Goal goal={goal} user={user} key={goal.key}/>)*/}
       {console.log(' goals: '+ goals)}
       {console.log(' goals[0]: '+ goals[0])}
