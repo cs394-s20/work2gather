@@ -116,9 +116,9 @@ const App = () =>  {
       {console.log(' goals[0]: '+ goals[0])}
       {/* {goals[0]? <Goal goal={goals[0]} user={user} key={goals[0].key}/> : <React.Fragment></React.Fragment>}
       {goals[1]? <Goal goal={goals[1]} user={user} key={goals[1].key}/> : <React.Fragment></React.Fragment>} */}
-      <Container maxWidth = "xl">
+      {user?<Container maxWidth = "xl">
         <GoalGrid goals = {goals} user = {user}/>
-      </Container>
+      </Container>:null}
     </div>
   );
 }

@@ -146,6 +146,31 @@ const Goal = ({ goal, user }) => {
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
 
+  useEffect(() => {
+    console.log("updating goal " + goal.key )
+    let users = Object.keys(goal["progress"]);
+    for(let j = 0; j <= getDayOn(); j++){
+      if(goal["progress"][users[0]][j] == undefined){
+        db.child("goals")
+          .child(goal["key"])
+          .child("progress")
+          .child(users[0])
+          .child(j)
+          .set(0);
+          console.log("updating db for goal " + goal.key + " for user " + users[0])
+      }
+      if(goal["progress"][users[1]][j] == undefined){
+        db.child("goals")
+          .child(goal["key"])
+          .child("progress")
+          .child(users[1])
+          .child(j)
+          .set(0);
+          console.log("updating db for goal " + goal.key + " for user " + users[1])
+
+      }
+    }
+  }, []);
 
   useEffect(() => {
     // setCheckedIn(canCheckIn);
