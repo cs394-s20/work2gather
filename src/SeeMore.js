@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -37,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 const data = [
   {
     name: '1', uv: 40, pv: 24, 
@@ -64,6 +65,8 @@ const data = [
 export default function MaxWidthDialog({ goal }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
+  const [goalData, setGoalData] = useState([]);
+
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -73,6 +76,19 @@ export default function MaxWidthDialog({ goal }) {
     setOpen(false);
   };
 
+  useEffect(() => {
+    let tempData = []; 
+    let users = Object.keys(goal["progress"]);
+    for(let j = 0; j < goal["progress"][users[0]].length; j++){
+      let entry = {
+        name: j.toString(), 
+        uv: goal["progress"][users[0]][j],
+        pv: goal["progress"][users[1]][j],
+      }
+      tempData.push(entry); 
+    }
+    setGoalData(tempData);
+  }, [goal]);
 
   return (
     <React.Fragment>
@@ -106,7 +122,7 @@ export default function MaxWidthDialog({ goal }) {
 	       <LineChart
 	        width={500}
 	        height={300}
-	        data={data}
+	        data={goalData}
 	        margin={{
 	          top: 5, right: 30, left: 30, bottom: 30,
 	        }}
@@ -121,7 +137,7 @@ export default function MaxWidthDialog({ goal }) {
   			<Legend verticalAlign="top" height={36}/>
 	        <Line name="Suzy Q." type="monotone" dataKey="uv" stroke="#8884d8" activeDot={{ r: 8 }} />
 	       	<Line name="Jonny P." type="monotone" dataKey="pv" stroke="#82ca9d" />
-	       	<ReferenceLine y={5000} label="Goal" stroke="green" strokeDasharray='5 5'  />
+	       	<ReferenceLine y={goal["minimum"]} label="Goal" stroke="green" strokeDasharray='5 5'  />
 	      </LineChart>
 	      </div>
 	      </div>
