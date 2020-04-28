@@ -193,7 +193,7 @@ const Goal = ({ goal, user }) => {
     setGoalCircleTop(0 - goalRadius / 2 + backRadius / 2) 
     setGoalCircleLeft(fullCardWidth / 2 - goalRadius / 2)
 
-    const circle2Radius = (fullCardWidth * 0.3) * (goal["progress"]["user2"][getDayOn()] / goal['minimum'])
+    const circle2Radius = (fullCardWidth * 0.3) * (goal["groupMembers"]["invitee"][getDayOn()] / goal['minimum'])
     setCircle1Radius(circle1Radius);
     setCircle2Radius(circle2Radius);
     setCircle1Left(fullCardWidth / 2 - circle1Radius / 2);

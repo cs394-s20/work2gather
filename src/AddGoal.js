@@ -87,7 +87,7 @@ const AddGoal = ({open, user, setOpen, emailTouid}) => {
               // endDate: "",
               groupMembers:{
                 creator: user.uid,
-                invitee: "user2"
+                invitee: emailTouid[temp]
               },
               minimum: minimum,
               metric: metric,
@@ -95,7 +95,7 @@ const AddGoal = ({open, user, setOpen, emailTouid}) => {
                 [user.uid]:{
                   0: 1
                 },
-                user2: {
+                [emailTouid[temp]]: {
                   0: 1
                 }
               }
@@ -111,7 +111,7 @@ const AddGoal = ({open, user, setOpen, emailTouid}) => {
       
             //add goal to invitee
             db.child("users")
-            .child("user2")
+            .child(emailTouid[temp])
             .child("invites")
             .push(key);
             handleClose();
