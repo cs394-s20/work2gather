@@ -76,6 +76,7 @@ const Banner = ({ user, title }) => (
 
 const App = () => {
   const [goalsJSON, setGoals] = useState({});
+  const [invites, setInvite] = useState({});
   const [user, setUser] = useState({});
   const [emailTouid, setEmailTouid] = useState({});
   const [open, setOpen] = useState(false);
@@ -103,6 +104,11 @@ const App = () => {
             console.log(goals_arr);
             setGoals(Object.values(goals_arr).map(goal => snap.val().goals[goal]));
           }
+          if (snap.val().users[user.uid] && snap.val().users[user.uid].invites) {
+            let invites_arr = snap.val().users[user.uid].invites;
+            console.log(invites_arr);
+            setInvite(Object.values(invites_arr).map(goal => snap.val().goals[goal]));
+          }
         }
       } else {
         setGoals({});
@@ -113,26 +119,27 @@ const App = () => {
     return () => { db.off('value', handleData); };
   }, [user]);
 
-  // const allGoal = Object.values(snap.val().users[user.uid].goals);
-
   return (
     <div>
       <Banner user={user} title="Work2Gather">
       </Banner>
       {user ? <AddGoal open={open} user={user} setOpen={setOpen} emailTouid={emailTouid} /> : null}
       {user ? <Container maxWidth="xl">
-        <GoalGrid goals={goals} user={user} />
+        <GoalGrid goals={goals} invites={invites} user={user} />
       </Container> : null}
     </div>
   );
 }
 
 
-const GoalGrid = ({ goals, user }) => {
+const GoalGrid = ({ goals, invites, user }) => {
   let classes = useStyles();
   let unfinished = [];
   let pending = [];
+  let invitelist = [];
+
   Object.values(goals).map(goals => goals.confirmed ? unfinished.push(goals) : pending.push(goals))
+  Object.values(invites).map(goals => invitelist.push(goals))
 
   return (
     <React.Fragment>
@@ -147,6 +154,14 @@ const GoalGrid = ({ goals, user }) => {
       <Grid container className={classes.gridcontainer} spacing={3} direction="row" justify="flex-start">
         <Grid item xs={12} className={classes.griditem}><Typography variant="h4">Pending Goals</Typography></Grid>
         {pending.map(goals =>
+          <Grid item xs={4}>
+            <Goal goal={goals} user={user} key={goals.key} />
+          </Grid>
+        )}
+      </Grid>
+      <Grid container className={classes.gridcontainer} spacing={3} direction="row" justify="flex-start">
+        <Grid item xs={12} className={classes.griditem}><Typography variant="h4">New Invitation</Typography></Grid>
+        {invitelist.map(goals =>
           <Grid item xs={4}>
             <Goal goal={goals} user={user} key={goals.key} />
           </Grid>
