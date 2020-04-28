@@ -12,7 +12,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import firebase from "./shared/firebase";
+import firebase from "../shared/firebase";
 import Slider from "@material-ui/core/Slider";
 import { TextField } from "@material-ui/core";
 import Container from "@material-ui/core/Container";

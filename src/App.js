@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import { makeStyles } from '@material-ui/core/styles';
-import Goal from './Goal'
+import Goal from './Card/Goal'
+import Invite from './Card/Invite'
 import AddGoal from './AddGoal';
 import firebase from './shared/firebase'
 import Button from '@material-ui/core/Button';
@@ -139,7 +140,8 @@ const GoalGrid = ({ goals, invites, user }) => {
   let invitelist = [];
 
   Object.values(goals).map(goals => goals.confirmed ? unfinished.push(goals) : pending.push(goals))
-  Object.values(invites).map(goals => invitelist.push(goals))
+
+  Object.values(invites).map(goals => goals.confirmed ? unfinished.push(goals) : invitelist.push(goals))
 
   return (
     <React.Fragment>
@@ -163,7 +165,7 @@ const GoalGrid = ({ goals, invites, user }) => {
         <Grid item xs={12} className={classes.griditem}><Typography variant="h4">New Invitation</Typography></Grid>
         {invitelist.map(goals =>
           <Grid item xs={4}>
-            <Goal goal={goals} user={user} key={goals.key} />
+            <Invite goal={goals} user={user} key={goals.key} />
           </Grid>
         )}
       </Grid>
