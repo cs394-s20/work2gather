@@ -33,7 +33,10 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
-  grid: {
+  gridcontainer:{
+    marginTop: 50
+  },
+  griditem: {
     marginBottom: -60
   }
 }));
@@ -88,18 +91,18 @@ const App = () => {
       console.log(user)
       if (user) {
         if (snap.val()) {
-          console.log(snap.val().users[user.uid]);
-
-          db.child("users").child(user.uid).child("name").set(user.displayName);
-          db.child("users").child(user.uid).child("goals").set("");
-          db.child("users").child(user.uid).child("intives").set("");
-          setEmailTouid(snap.val().emailTouid);
           let re = /\./gi;
           let email = user.email.replace(re, ',')
           db.child('emailTouid/' + email).set(user.uid);
-          let goals_arr = snap.val().users[user.uid].goals;
-          console.log(goals_arr);
-          setGoals(Object.values(goals_arr).map(goal => snap.val().goals[goal]));
+          setEmailTouid(snap.val().emailTouid);
+          if(!snap.val().users[user.uid]){
+            db.child("users").child(user.uid).child("name").set(user.displayName);
+          }
+          if(snap.val().users[user.uid]&&snap.val().users[user.uid].goals){
+            let goals_arr = snap.val().users[user.uid].goals;
+            console.log(goals_arr);
+            setGoals(Object.values(goals_arr).map(goal => snap.val().goals[goal]));
+          }
         }
       } else {
         setGoals({});
@@ -117,11 +120,6 @@ const App = () => {
       <Banner user={user} title="Work2Gather">
       </Banner>
       {user ? <AddGoal open={open} user={user} setOpen={setOpen} emailTouid={emailTouid} /> : null}
-      {/*goals.map(goal => <Goal goal={goal} user={user} key={goal.key}/>)*/}
-      {console.log(' goals: ' + goals)}
-      {console.log(' goals[0]: ' + goals[0])}
-      {/* {goals[0]? <Goal goal={goals[0]} user={user} key={goals[0].key}/> : <React.Fragment></React.Fragment>}
-      {goals[1]? <Goal goal={goals[1]} user={user} key={goals[1].key}/> : <React.Fragment></React.Fragment>} */}
       {user ? <Container maxWidth="xl">
         <GoalGrid goals={goals} user={user} />
       </Container> : null}
@@ -139,15 +137,15 @@ const GoalGrid = ({ goals, user }) => {
   return (
     <React.Fragment>
       <Grid container spacing={3} direction="row" justify="flex-start">
-        <Grid item xs={12} className={classes.grid}><Typography variant="h4">Unfinished Goals</Typography></Grid>
+        <Grid item xs={12} className={classes.griditem}><Typography variant="h4">Unfinished Goals</Typography></Grid>
         {unfinished.map(goals =>
           <Grid item xs={4}>
             <Goal goal={goals} user={user} key={goals.key} />
           </Grid>
         )}
       </Grid>
-      <Grid container spacing={3} direction="row" justify="flex-start">
-        <Grid item xs={12} className={classes.grid}><Typography variant="h4">Pending Goals</Typography></Grid>
+      <Grid container className={classes.gridcontainer} spacing={3} direction="row" justify="flex-start">
+        <Grid item xs={12} className={classes.griditem}><Typography variant="h4">Pending Goals</Typography></Grid>
         {pending.map(goals =>
           <Grid item xs={4}>
             <Goal goal={goals} user={user} key={goals.key} />
