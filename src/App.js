@@ -81,6 +81,7 @@ const App = () => {
   const [user, setUser] = useState({});
   const [emailTouid, setEmailTouid] = useState({});
   const [open, setOpen] = useState(false);
+  const apple = 0; 
 
   var goals = Object.values(goalsJSON);
 
