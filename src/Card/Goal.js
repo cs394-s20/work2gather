@@ -143,10 +143,28 @@ const Goal = ({ goal, user }) => {
   const [backCircleRadius, setBackCircleRadius] = useState(0);
 
   const [fullCardRef, setFullCardRef] = useState(React.createRef());
+
+  const [creatorName, setCreatorName] = useState("");
+  const [inviteeName, setInviteeName] = useState("");
+
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
 
   useEffect(() => {
+    const setGoalUserNames = snap => {
+      if(snap.val()){
+    //     alert('yo')
+    //     console.log(snap.val());
+        setCreatorName(snap.val()[goal["groupMembers"]["creator"]]['name'].split(" ")[0]);
+        setInviteeName(snap.val()[goal["groupMembers"]["invitee"]]['name'].split(" ")[0]);
+      }
+    };
+
+    const dbUsers = firebase.database().ref("users");
+    dbUsers.on('value', setGoalUserNames, error => alert(error));
+    return () => { dbUsers.off('value', setGoalUserNames); };
+    
+
     let users = Object.keys(goal["progress"]);
     for(let j = 0; j <= getDayOn(); j++){
       if(goal["progress"][users[0]][j] == undefined){
@@ -391,13 +409,13 @@ const Goal = ({ goal, user }) => {
               <TableRow>
                 <TableCell className={classes.ourSpecialBlue}>
                   {" "}
-                  {/*user.displayName.split(' ')[0]*/ "Suzy Q"}
+                  {/*user.displayName.split(' ')[0]*/ creatorName}
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell className={classes.ourSpecialGreen}>
                   {" "}
-                  {"Johnny P"}
+                  {inviteeName}
                 </TableCell>
               </TableRow>
             </TableBody>
