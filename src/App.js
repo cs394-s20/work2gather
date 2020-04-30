@@ -93,7 +93,6 @@ const App = () => {
     const handleData = snap => {
       if (user) {
         if (snap.val()) {
-          console.log('testhandledata')
           let re = /\./gi;
           let email = user.email.replace(re, ',')
           db.child('emailTouid/' + email).set(user.uid);
@@ -103,8 +102,6 @@ const App = () => {
           }
           if(snap.val().users[user.uid]&&snap.val().users[user.uid].goals){
             let goals_arr = snap.val().users[user.uid].goals;
-            console.log('testdelete')
-            console.log(goals_arr);
             setGoals(Object.values(goals_arr).map(goal => snap.val().goals[goal]));
           }
           else{
@@ -112,7 +109,6 @@ const App = () => {
           }
           if (snap.val().users[user.uid] && snap.val().users[user.uid].invites) {
             let invites_arr = snap.val().users[user.uid].invites;
-            console.log(invites_arr);
             setInvite(Object.values(invites_arr).map(goal => snap.val().goals[goal]));
           }
           else{
