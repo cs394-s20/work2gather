@@ -18,6 +18,8 @@ import { TextField } from "@material-ui/core";
 import Container from "@material-ui/core/Container";
 import MaxWidthDialog from "./SeeMore"
 import clsx from 'clsx';
+import Badge from '@material-ui/core/Badge';
+import ClearIcon from '@material-ui/icons/Clear';
 
 
 const db = firebase.database().ref();
@@ -29,7 +31,7 @@ const db = firebase.database().ref();
     // marginLeft: "5%",
     // marginRight: "5%",
     // overflow: "auto",
-    marginTop: "50px",
+    // marginTop: "50px",
     // display: "inline-block",
   },
   bullet: {
@@ -390,7 +392,22 @@ const Goal = ({ goal, user }) => {
     );
   };
 
+  const deleteGoal = () => {
+    db.child('users').child(goal.groupMembers.creator).child('goals').child(goal.key).set(null);
+    db.child('users').child(goal.groupMembers.invitee).child('invites').child(goal.key).set(null);
+    db.child('goals').child(goal.key).set(null);
+  }
+
   return (
+    <React.Fragment>
+    <Badge 
+      badgeContent={<ClearIcon onClick={deleteGoal}/>} 
+      color="primary"
+      anchorOrigin={{
+      vertical: 'top',
+      horizontal: 'right',
+    }}
+    >
     <Card className={classes.root}>
       <CardContent>
         <div style={{ width: "70%", display: "inline-block" }}>
@@ -489,6 +506,8 @@ const Goal = ({ goal, user }) => {
         <MaxWidthDialog goal={goal}/>
       </CardContent>
     </Card>
+    </Badge>
+    </React.Fragment>
   );
 };
 

@@ -35,10 +35,10 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   gridcontainer:{
-    marginTop: 50
+    // marginTop: 50
   },
   griditem: {
-    marginBottom: -60
+    // marginBottom: -60
   }
 }));
 
@@ -91,9 +91,9 @@ const App = () => {
 
   useEffect(() => {
     const handleData = snap => {
-      console.log(user)
       if (user) {
         if (snap.val()) {
+          console.log('testhandledata')
           let re = /\./gi;
           let email = user.email.replace(re, ',')
           db.child('emailTouid/' + email).set(user.uid);
@@ -103,13 +103,20 @@ const App = () => {
           }
           if(snap.val().users[user.uid]&&snap.val().users[user.uid].goals){
             let goals_arr = snap.val().users[user.uid].goals;
+            console.log('testdelete')
             console.log(goals_arr);
             setGoals(Object.values(goals_arr).map(goal => snap.val().goals[goal]));
+          }
+          else{
+            setGoals({});
           }
           if (snap.val().users[user.uid] && snap.val().users[user.uid].invites) {
             let invites_arr = snap.val().users[user.uid].invites;
             console.log(invites_arr);
             setInvite(Object.values(invites_arr).map(goal => snap.val().goals[goal]));
+          }
+          else{
+            setInvite({});
           }
         }
       } else {
@@ -148,7 +155,7 @@ const GoalGrid = ({ goals, invites, user }) => {
 
     Object.values(goals).map(goal => goal.confirmed ? unfinished_temp.push(goal) : pending_temp.push(goal));
     Object.values(invites).map(goal => goal.confirmed ?  unfinished_temp.push(goal) : invitelist_temp.push(goal));
-    
+
     setUnfinished(unfinished_temp);
     setPending(pending_temp);
     setInvitelist(invitelist_temp);

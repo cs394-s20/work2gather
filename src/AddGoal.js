@@ -107,13 +107,15 @@ const AddGoal = ({open, user, setOpen, emailTouid}) => {
             db.child("users")
               .child(user.uid)
               .child("goals")
-              .push(key);
+              .child(key)
+              .set(key);
       
             //add goal to invitee
             db.child("users")
             .child(emailTouid[temp])
             .child("invites")
-            .push(key);
+            .child(key)
+            .set(key);
             handleClose();
           }
       }
