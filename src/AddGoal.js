@@ -93,10 +93,10 @@ const AddGoal = ({open, user, setOpen, emailTouid}) => {
               metric: metric,
               progress: {
                 [user.uid]:{
-                  0: 1
+                  0: 0
                 },
                 [emailTouid[temp]]: {
-                  0: 1
+                  0: 0
                 }
               }
             }
