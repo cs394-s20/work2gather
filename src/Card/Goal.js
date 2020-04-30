@@ -179,7 +179,7 @@ const Goal = ({ goal, user }) => {
     // console.log("lebelo treso: " + fullCardRef.current.offsetWidth)
     const fullCardWidth = fullCardRef.current.offsetWidth;
     const fullCardHeight = fullCardRef.current.offsetHeight;
-    const circle1Radius = (fullCardWidth*0.30) * (goal["progress"][user.uid][getDayOn()] / goal["minimum"])
+    const circle1Radius = (fullCardWidth*0.30) * (goal["progress"][goal["groupMembers"]["creator"]][getDayOn()] / goal["minimum"])
     console.log("lebelo cinco: " + goal["progress"][user.uid][getDayOn()])
     console.log("lebelo sixo: " + goal["progress"]['minimum'])
     const goalRadius =  fullCardWidth * 0.3;

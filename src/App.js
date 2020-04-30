@@ -136,14 +136,24 @@ const App = () => {
 
 const GoalGrid = ({ goals, invites, user }) => {
   let classes = useStyles();
-  let unfinished = [];
-  let pending = [];
-  let invitelist = [];
+  const [unfinished, setUnfinished] = useState([]);
+  const [pending, setPending] = useState([]);
+  const [invitelist, setInvitelist] = useState([]);
 
-  Object.values(goals).map(goals => goals.confirmed ? unfinished.push(goals) : pending.push(goals))
+  useEffect(() => {
+    console.log( "grid invite" +  invitelist);
+    let unfinished_temp = [];
+    let pending_temp = [];
+    let invitelist_temp = [];
 
-  Object.values(invites).map(goals => goals.confirmed ? unfinished.push(goals) : invitelist.push(goals))
-
+    Object.values(goals).map(goal => goal.confirmed ? unfinished_temp.push(goal) : pending_temp.push(goal));
+    Object.values(invites).map(goal => goal.confirmed ?  unfinished_temp.push(goal) : invitelist_temp.push(goal));
+    
+    setUnfinished(unfinished_temp);
+    setPending(pending_temp);
+    setInvitelist(invitelist_temp);
+  }, [goals]);
+  
   return (
     <React.Fragment>
       <Grid container spacing={3} direction="row" justify="flex-start">
