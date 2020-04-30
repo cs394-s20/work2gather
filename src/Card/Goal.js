@@ -147,6 +147,8 @@ const Goal = ({ goal, user }) => {
   const [creatorName, setCreatorName] = useState("");
   const [inviteeName, setInviteeName] = useState("");
 
+  const [lastRemindDay, setLastRemindDay] = useState(-1);
+
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
 
@@ -234,6 +236,9 @@ const Goal = ({ goal, user }) => {
     setCircle1Top(0 - circle1Radius / 2 + backRadius / 2);
     setCircle2Left(fullCardWidth / 2 - circle2Radius / 2);
     setCircle2Top(0 - circle2Radius / 2 + backRadius / 2);
+
+    //  Reminder Notifications
+    setLastRemindDay(getReminder(user.id));
   }, [goal]);
 
   const getDayOn = () => {
@@ -302,8 +307,29 @@ const Goal = ({ goal, user }) => {
     // setCheckedIn(true);
   };
 
-  const reminder = () => {
+  const setReminder = () => {
     alert("you have reminded your friend");
+    const onDayNum = getDayOn();
+    if (user.uid === goal.groupMembers.creator) {
+      db.child("goals")
+        .child(goal["key"])
+        .child("lastRemindInvitee")
+        .set(onDayNum);
+    } else {
+      db.child("goals")
+        .child(goal["key"])
+        .child("lastRemindCreator")
+        .set(onDayNum);
+    }
+  };
+
+  const getReminder = () => {
+    const onDayNum = getDayOn();
+    if (user.uid === goal.groupMembers.creator) {
+      return goal["lastRemindCreator"];
+    } else {
+      return goal["lastRemindInvitee"];
+    }
   };
 
   const ProgressGrid = () => {
@@ -420,12 +446,31 @@ const Goal = ({ goal, user }) => {
     );
   };
 
+  console.log("getDayOn" + getDayOn());
+  console.log("lastRemindDay" + lastRemindDay);
+  console.log(
+    "goal[progress][user.uid][getDayOn()]" +
+      goal["progress"][user.uid][getDayOn()]
+  );
+  console.log("goal[minimum]" + goal["minimum"]);
+
   return (
+    // const onDayNum = getDayOn();
+    // if (user.uid === goal.groupMembers.creator)
+    // invisible={
+    //   getDayOn() === lastRemindDay &&
+    //   goal["progress"][user.id][getDayOn()] < goal["minimum"]
+    // }
     <Badge
       anchorOrigin={{ vertical: "top", horizontal: "left" }}
       color="secondary"
-      // style={{ height: 30 }}
       badgeContent={<NotificationsIcon fontSize="small" />}
+      invisible={
+        !(
+          getDayOn() === lastRemindDay &&
+          goal["progress"][user.uid][getDayOn()] < goal["minimum"]
+        )
+      }
     >
       <Card className={classes.root}>
         <CardContent>
@@ -543,7 +588,7 @@ const Goal = ({ goal, user }) => {
               variant="contained"
               color="primary"
               style={{ width: "70px", float: "right", marginTop: "30px" }}
-              onClick={reminder}
+              onClick={setReminder}
             >
               Remind Friends
             </Button>
