@@ -16,20 +16,21 @@ import firebase from "../shared/firebase";
 import Slider from "@material-ui/core/Slider";
 import { TextField } from "@material-ui/core";
 import Container from "@material-ui/core/Container";
-import MaxWidthDialog from "./SeeMore"
-import clsx from 'clsx';
-
+import MaxWidthDialog from "./SeeMore";
+import clsx from "clsx";
+import NotificationsIcon from "@material-ui/icons/Notifications";
+import Badge from "@material-ui/core/Badge";
 
 const db = firebase.database().ref();
 
-  const useStyles = makeStyles({
+const useStyles = makeStyles({
   root: {
     // maxWidth: "65%",
     // minWidth: "35%",
     // marginLeft: "5%",
     // marginRight: "5%",
     // overflow: "auto",
-    marginTop: "50px",
+    // marginTop: "50px",
     // display: "inline-block",
   },
   bullet: {
@@ -87,9 +88,9 @@ const db = firebase.database().ref();
     paddingBottom: "0px",
     paddingTop: "10px",
     textAlign: "center",
-    width: "50px"
+    width: "50px",
   },
-   onDays: {
+  onDays: {
     size: "small",
     // border: "1px solid black",
     borderBottom: "1px solid black",
@@ -97,25 +98,24 @@ const db = firebase.database().ref();
     paddingTop: "10px",
     textAlign: "center",
     width: "50px",
-    backgroundColor: "#14ECF5"
+    backgroundColor: "#14ECF5",
   },
   shape1: {
     backgroundColor: "#14ECF5",
     opacity: 0.5,
-
   },
   shape2: {
     backgroundColor: "#14F58E",
     opacity: 0.5,
   },
   shapeCircle: {
-    borderRadius: '50%',
+    borderRadius: "50%",
   },
   goalCircle: {
     backgroundColor: "white",
   },
   backCircle: {
-    backgroundColor: "black", 
+    backgroundColor: "black",
   },
 });
 
@@ -127,11 +127,11 @@ const Goal = ({ goal, user }) => {
   const [circle1Left, setCircle1Left] = useState(0);
   const [circle1Top, setCircle1Top] = useState(0);
   const [circle1Radius, setCircle1Radius] = useState(0);
-  
+
   const [circle2Left, setCircle2Left] = useState(0);
   const [circle2Top, setCircle2Top] = useState(0);
   const [circle2Radius, setCircle2Radius] = useState(0);
-  
+
   const [goalCircleRef, setGoalCircleRef] = useState(React.createRef());
   const [goalCircleLeft, setGoalCircleLeft] = useState(0);
   const [goalCircleTop, setGoalCircleTop] = useState(0);
@@ -151,40 +151,48 @@ const Goal = ({ goal, user }) => {
   const bull = <span className={classes.bullet}>•</span>;
 
   useEffect(() => {
-    const setGoalUserNames = snap => {
-      if(snap.val()){
-    //     alert('yo')
-    //     console.log(snap.val());
-        setCreatorName(snap.val()[goal["groupMembers"]["creator"]]['name'].split(" ")[0]);
-        setInviteeName(snap.val()[goal["groupMembers"]["invitee"]]['name'].split(" ")[0]);
+    const setGoalUserNames = (snap) => {
+      if (snap.val()) {
+        //     alert('yo')
+        //     console.log(snap.val());
+        setCreatorName(
+          snap.val()[goal["groupMembers"]["creator"]]["name"].split(" ")[0]
+        );
+        setInviteeName(
+          snap.val()[goal["groupMembers"]["invitee"]]["name"].split(" ")[0]
+        );
       }
     };
 
     const dbUsers = firebase.database().ref("users");
-    dbUsers.on('value', setGoalUserNames, error => alert(error));
-    return () => { dbUsers.off('value', setGoalUserNames); };
-    
+    dbUsers.on("value", setGoalUserNames, (error) => alert(error));
+    return () => {
+      dbUsers.off("value", setGoalUserNames);
+    };
 
     let users = Object.keys(goal["progress"]);
-    for(let j = 0; j <= getDayOn(); j++){
-      if(goal["progress"][users[0]][j] == undefined){
+    for (let j = 0; j <= getDayOn(); j++) {
+      if (goal["progress"][users[0]][j] == undefined) {
         db.child("goals")
           .child(goal["key"])
           .child("progress")
           .child(users[0])
           .child(j)
           .set(0);
-          console.log("updating db for goal " + goal.key + " for user " + users[0])
+        console.log(
+          "updating db for goal " + goal.key + " for user " + users[0]
+        );
       }
-      if(goal["progress"][users[1]][j] == undefined){
+      if (goal["progress"][users[1]][j] == undefined) {
         db.child("goals")
           .child(goal["key"])
           .child("progress")
           .child(users[1])
           .child(j)
           .set(0);
-          console.log("updating db for goal " + goal.key + " for user " + users[1])
-
+        console.log(
+          "updating db for goal " + goal.key + " for user " + users[1]
+        );
       }
     }
   }, []);
@@ -197,21 +205,29 @@ const Goal = ({ goal, user }) => {
     // console.log("lebelo treso: " + fullCardRef.current.offsetWidth)
     const fullCardWidth = fullCardRef.current.offsetWidth;
     const fullCardHeight = fullCardRef.current.offsetHeight;
-    const circle1Radius = (fullCardWidth*0.30) * (goal["progress"][goal["groupMembers"]["creator"]][getDayOn()] / goal["minimum"])
-    console.log("lebelo cinco: " + goal["progress"][user.uid][getDayOn()])
-    console.log("lebelo sixo: " + goal["progress"]['minimum'])
-    const goalRadius =  fullCardWidth * 0.3;
-    const backRadius = fullCardWidth * 0.31; 
+    const circle1Radius =
+      fullCardWidth *
+      0.3 *
+      (goal["progress"][goal["groupMembers"]["creator"]][getDayOn()] /
+        goal["minimum"]);
+    console.log("lebelo cinco: " + goal["progress"][user.uid][getDayOn()]);
+    console.log("lebelo sixo: " + goal["progress"]["minimum"]);
+    const goalRadius = fullCardWidth * 0.3;
+    const backRadius = fullCardWidth * 0.31;
 
-    setBackCircleRadius(backRadius)
-    setBackCircleTop(0) 
-    setBackCircleLeft(fullCardWidth / 2 - backRadius / 2)
+    setBackCircleRadius(backRadius);
+    setBackCircleTop(0);
+    setBackCircleLeft(fullCardWidth / 2 - backRadius / 2);
 
     setGoalCircleRadius(goalRadius);
-    setGoalCircleTop(0 - goalRadius / 2 + backRadius / 2) 
-    setGoalCircleLeft(fullCardWidth / 2 - goalRadius / 2)
+    setGoalCircleTop(0 - goalRadius / 2 + backRadius / 2);
+    setGoalCircleLeft(fullCardWidth / 2 - goalRadius / 2);
 
-    const circle2Radius = (fullCardWidth * 0.3) * (goal["progress"][goal["groupMembers"]["invitee"]][getDayOn()] / goal['minimum'])
+    const circle2Radius =
+      fullCardWidth *
+      0.3 *
+      (goal["progress"][goal["groupMembers"]["invitee"]][getDayOn()] /
+        goal["minimum"]);
     setCircle1Radius(circle1Radius);
     setCircle2Radius(circle2Radius);
     setCircle1Left(fullCardWidth / 2 - circle1Radius / 2);
@@ -357,13 +373,27 @@ const Goal = ({ goal, user }) => {
 
     let daysOfTheWeek = (
       <TableRow>
-        <TableCell className={dateNum == 0 ? classes.onDays : classes.weekDays}>SUN</TableCell>
-        <TableCell className={dateNum == 1 ? classes.onDays : classes.weekDays}>MON</TableCell>
-        <TableCell className={dateNum == 2 ? classes.onDays : classes.weekDays}>TUE</TableCell>
-        <TableCell className={dateNum == 3 ? classes.onDays : classes.weekDays}>WED</TableCell>
-        <TableCell className={dateNum == 4 ? classes.onDays : classes.weekDays}>THU</TableCell>
-        <TableCell className={dateNum == 5 ? classes.onDays : classes.weekDays}>FRI</TableCell>
-        <TableCell className={dateNum == 6 ? classes.onDays : classes.weekDays}>SAT</TableCell>
+        <TableCell className={dateNum == 0 ? classes.onDays : classes.weekDays}>
+          SUN
+        </TableCell>
+        <TableCell className={dateNum == 1 ? classes.onDays : classes.weekDays}>
+          MON
+        </TableCell>
+        <TableCell className={dateNum == 2 ? classes.onDays : classes.weekDays}>
+          TUE
+        </TableCell>
+        <TableCell className={dateNum == 3 ? classes.onDays : classes.weekDays}>
+          WED
+        </TableCell>
+        <TableCell className={dateNum == 4 ? classes.onDays : classes.weekDays}>
+          THU
+        </TableCell>
+        <TableCell className={dateNum == 5 ? classes.onDays : classes.weekDays}>
+          FRI
+        </TableCell>
+        <TableCell className={dateNum == 6 ? classes.onDays : classes.weekDays}>
+          SAT
+        </TableCell>
       </TableRow>
     );
     for (let i = 0; i < user1Rows.length; i++) {
@@ -391,77 +421,135 @@ const Goal = ({ goal, user }) => {
   };
 
   return (
-    <Card className={classes.root}>
-      <CardContent>
-        <div style={{ width: "70%", display: "inline-block" }}>
-          <Typography variant="h5" component="h2">
-            {goal["title"]}
-          </Typography>
-          <Typography className={classes.pos} color="textSecondary">
-            {goal["description"]}
-            <br></br>
-            Started: {goal["startDate"]}
-          </Typography>
-        </div>
-        <div style={{ width: "20%", display: "inline-block", float: "right" }}>
-          <Table>
-            <TableBody>
-              <TableRow>
-                <TableCell className={classes.ourSpecialBlue}>
-                  {" "}
-                  {/*user.displayName.split(' ')[0]*/ creatorName}
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className={classes.ourSpecialGreen}>
-                  {" "}
-                  {inviteeName}
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </div>
-        <div ref={fullCardRef} style={{position: "relative", height: backCircleRadius * 1.05, width: '100%'}}>
-            <div style={{overflow: "visible", position: "absolute", left: backCircleLeft, top:backCircleTop, width: backCircleRadius, height: backCircleRadius}} className={clsx(classes.backCircle, classes.shapeCircle)} />
-            <div ref={goalCircleRef} style={{overflow: "visible", position: "absolute", left: goalCircleLeft, top:goalCircleTop, width: goalCircleRadius, height: goalCircleRadius}} className={clsx(classes.goalCircle, classes.shapeCircle)} />
-            <div ref={circle1Ref} style={{overflow: "visible", position: "absolute", left: circle1Left, top:circle1Top, width: circle1Radius, height: circle1Radius}} className={clsx(classes.shape1, classes.shapeCircle)} />
-            <div ref={circle2Ref} style={{overflow: "visible", position: "absolute", left: circle2Left, top:circle2Top, width: circle2Radius, height: circle2Radius}} className={clsx(classes.shape2, classes.shapeCircle)} />      
-        </div>
-        {/*<ProgressGrid />*/}
-
-        <h4
-          className={classes.marginless}
-          style={{ marginTop: "10px" }}
-          align="center"
-        >
-          Day {getDayOn()}
-        </h4>
-
-        <Typography id="discrete-slider" gutterBottom>
-          {goal["metric"]}:{console.log("cheese: " + user.uid)}
-        </Typography>
-        <Container style={{ marginLeft: "auto", marginRight: "auto" }}>
-          {/* {" "} */}
-          <TextField
-            id="outlined-basic"
-            label="Outlined"
-            variant="outlined"
-            type="number"
-            onChange={saveProgress}
-            defaultValue={progress}
-          />
-          <Button
-            size="small"
-            variant="contained"
-            color="primary"
-            style={{ width: "70px", float: "right", marginTop: "30px"}}
-            onClick={reminder}
+    <Badge
+      anchorOrigin={{ vertical: "top", horizontal: "left" }}
+      color="secondary"
+      // style={{ height: 30 }}
+      badgeContent={<NotificationsIcon fontSize="small" />}
+    >
+      <Card className={classes.root}>
+        <CardContent>
+          <div style={{ width: "70%", display: "inline-block" }}>
+            <Typography variant="h5" component="h2">
+              {goal["title"]}
+            </Typography>
+            <Typography className={classes.pos} color="textSecondary">
+              {goal["description"]}
+              <br></br>
+              Started: {goal["startDate"]}
+            </Typography>
+          </div>
+          <div
+            style={{ width: "20%", display: "inline-block", float: "right" }}
           >
-            Remind Friends
-          </Button>
-        </Container>
+            <Table>
+              <TableBody>
+                <TableRow>
+                  <TableCell className={classes.ourSpecialBlue}>
+                    {" "}
+                    {/*user.displayName.split(' ')[0]*/ creatorName}
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell className={classes.ourSpecialGreen}>
+                    {" "}
+                    {inviteeName}
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </div>
+          <div
+            ref={fullCardRef}
+            style={{
+              position: "relative",
+              height: backCircleRadius * 1.05,
+              width: "100%",
+            }}
+          >
+            <div
+              style={{
+                overflow: "visible",
+                position: "absolute",
+                left: backCircleLeft,
+                top: backCircleTop,
+                width: backCircleRadius,
+                height: backCircleRadius,
+              }}
+              className={clsx(classes.backCircle, classes.shapeCircle)}
+            />
+            <div
+              ref={goalCircleRef}
+              style={{
+                overflow: "visible",
+                position: "absolute",
+                left: goalCircleLeft,
+                top: goalCircleTop,
+                width: goalCircleRadius,
+                height: goalCircleRadius,
+              }}
+              className={clsx(classes.goalCircle, classes.shapeCircle)}
+            />
+            <div
+              ref={circle1Ref}
+              style={{
+                overflow: "visible",
+                position: "absolute",
+                left: circle1Left,
+                top: circle1Top,
+                width: circle1Radius,
+                height: circle1Radius,
+              }}
+              className={clsx(classes.shape1, classes.shapeCircle)}
+            />
+            <div
+              ref={circle2Ref}
+              style={{
+                overflow: "visible",
+                position: "absolute",
+                left: circle2Left,
+                top: circle2Top,
+                width: circle2Radius,
+                height: circle2Radius,
+              }}
+              className={clsx(classes.shape2, classes.shapeCircle)}
+            />
+          </div>
+          {/*<ProgressGrid />*/}
 
-        {/* <Slider
+          <h4
+            className={classes.marginless}
+            style={{ marginTop: "10px" }}
+            align="center"
+          >
+            Day {getDayOn()}
+          </h4>
+
+          <Typography id="discrete-slider" gutterBottom>
+            {goal["metric"]}:{console.log("cheese: " + user.uid)}
+          </Typography>
+          <Container style={{ marginLeft: "auto", marginRight: "auto" }}>
+            {/* {" "} */}
+            <TextField
+              id="outlined-basic"
+              label="Outlined"
+              variant="outlined"
+              type="number"
+              onChange={saveProgress}
+              defaultValue={progress}
+            />
+            <Button
+              size="small"
+              variant="contained"
+              color="primary"
+              style={{ width: "70px", float: "right", marginTop: "30px" }}
+              onClick={reminder}
+            >
+              Remind Friends
+            </Button>
+          </Container>
+
+          {/* <Slider
           style={{ width: "95%", marginLeft: "2%", float: "center" }}
           defaultValue={5}
           getAriaValueText={(value) => value}
@@ -474,21 +562,22 @@ const Goal = ({ goal, user }) => {
           max={15}
         /> */}
 
-        <CardActions>
-        <Button
-            size="medium"
-            variant="contained"
-            color="primary"
-            // style={{ marginLeft: "auto", marginRight: "auto" }}
-            style={{ marginTop : "5px", marginLeft: "23.5px"}}
-            onClick={updateProgress}
-          >
-            Update Progress
-          </Button>          
-        </CardActions>
-        <MaxWidthDialog goal={goal}/>
-      </CardContent>
-    </Card>
+          <CardActions>
+            <Button
+              size="medium"
+              variant="contained"
+              color="primary"
+              // style={{ marginLeft: "auto", marginRight: "auto" }}
+              style={{ marginTop: "5px", marginLeft: "23.5px" }}
+              onClick={updateProgress}
+            >
+              Update Progress
+            </Button>
+          </CardActions>
+          <MaxWidthDialog goal={goal} />
+        </CardContent>
+      </Card>
+    </Badge>
   );
 };
 
