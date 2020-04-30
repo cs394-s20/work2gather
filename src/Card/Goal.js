@@ -21,6 +21,10 @@ import clsx from 'clsx';
 import Badge from '@material-ui/core/Badge';
 import ClearIcon from '@material-ui/icons/Clear';
 import NotificationsIcon from "@material-ui/icons/Notifications";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
 
 const db = firebase.database().ref();
 
@@ -149,6 +153,7 @@ const Goal = ({ goal, user }) => {
   const [inviteeName, setInviteeName] = useState("");
 
   const [lastRemindDay, setLastRemindDay] = useState(-1);
+  const [open, setOpen] = useState(false);
 
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
@@ -366,13 +371,22 @@ const Goal = ({ goal, user }) => {
       }
     >
       <Badge 
-      badgeContent={<ClearIcon onClick={deleteGoal}/>} 
+      badgeContent={<ClearIcon onClick={()=>setOpen(true)}/>} 
       color="primary"
       anchorOrigin={{
       vertical: 'top',
       horizontal: 'right',
     }}
       >
+       <Dialog open={open} onClose={()=>setOpen(false)}>
+        <DialogContent>
+          Are you sure you want to delete this goal?
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={()=>setOpen(false)}>Cancel</Button>
+          <Button onClick={deleteGoal}>Delete</Button>
+        </DialogActions>
+      </Dialog>
       <Card className={classes.root}>
         <CardContent>
           <div style={{ width: "70%", display: "inline-block" }}>
