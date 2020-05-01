@@ -11,11 +11,9 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
 import Slider from "@material-ui/core/Slider";
 import { TextField } from "@material-ui/core";
 import Container from "@material-ui/core/Container";
-import SeeMore from "./SeeMore"
 import clsx from 'clsx';
 import Badge from '@material-ui/core/Badge';
 import ClearIcon from '@material-ui/icons/Clear';
@@ -24,6 +22,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import SeeMore from "./SeeMore"
 import firebase from "../shared/firebase";
 
 const db = firebase.database().ref();
@@ -38,11 +37,6 @@ const useStyles = makeStyles({
     // marginTop: "50px",
     // display: "inline-block",
     border: "1px solid black"
-  },
-  bullet: {
-    display: "inline-block",
-    margin: "0 2px",
-    transform: "scale(0.8)",
   },
   title: {
     fontSize: 14,
@@ -123,6 +117,7 @@ const useStyles = makeStyles({
 const Goal = ({ goal, user }) => {
   const [progress, setProgress] = useState(0);
   const [checkedIn, setCheckedIn] = useState(false);
+  
   const [circle1Ref, setCircle1Ref] = useState(React.createRef());
   const [circle2Ref, setCircle2Ref] = useState(React.createRef());
   const [circle1Left, setCircle1Left] = useState(0);
@@ -152,13 +147,10 @@ const Goal = ({ goal, user }) => {
   const [open, setOpen] = useState(false);
 
   const classes = useStyles();
-  const bull = <span className={classes.bullet}>•</span>;
 
   useEffect(() => {
     const setGoalUserNames = (snap) => {
       if (snap.val()) {
-        //     alert('yo')
-        //     console.log(snap.val());
         setCreatorName(
           snap.val()[goal["groupMembers"]["creator"]]["name"].split(" ")[0]
         );
@@ -198,20 +190,11 @@ const Goal = ({ goal, user }) => {
   }, []);
 
   useEffect(() => {
-    // setCheckedIn(canCheckIn);
     setProgress(getProgress);
-    // console.log("label uno: " +  circle1Ref.current.offsetWidth)
-    // console.log("lebelo doso: " + circle2Ref.current.offsetWidth)
-    // console.log("lebelo treso: " + fullCardRef.current.offsetWidth)
+
     const fullCardWidth = fullCardRef.current.offsetWidth;
     const fullCardHeight = fullCardRef.current.offsetHeight;
-    const circle1Radius =
-      fullCardWidth *
-      0.3 *
-      (goal["progress"][goal["groupMembers"]["creator"]][getDayOn()] /
-        goal["minimum"]);
-    //console.log("lebelo cinco: " + goal["progress"][user.uid][getDayOn()]);
-    //console.log("lebelo sixo: " + goal["progress"]["minimum"]);
+
     const goalRadius = fullCardWidth * 0.3;
     const backRadius = fullCardWidth * 0.31;
 
@@ -223,15 +206,21 @@ const Goal = ({ goal, user }) => {
     setGoalCircleTop(0 - goalRadius / 2 + backRadius / 2);
     setGoalCircleLeft(fullCardWidth / 2 - goalRadius / 2);
 
+    const circle1Radius =
+      fullCardWidth *
+      0.3 *
+      (goal["progress"][goal["groupMembers"]["creator"]][getDayOn()] /
+        goal["minimum"]);
+    setCircle1Radius(circle1Radius);
+    setCircle1Left(fullCardWidth / 2 - circle1Radius / 2);
+    setCircle1Top(0 - circle1Radius / 2 + backRadius / 2);
+
     const circle2Radius =
       fullCardWidth *
       0.3 *
       (goal["progress"][goal["groupMembers"]["invitee"]][getDayOn()] /
         goal["minimum"]);
-    setCircle1Radius(circle1Radius);
     setCircle2Radius(circle2Radius);
-    setCircle1Left(fullCardWidth / 2 - circle1Radius / 2);
-    setCircle1Top(0 - circle1Radius / 2 + backRadius / 2);
     setCircle2Left(fullCardWidth / 2 - circle2Radius / 2);
     setCircle2Top(0 - circle2Radius / 2 + backRadius / 2);
 
@@ -247,14 +236,6 @@ const Goal = ({ goal, user }) => {
     return deltadays;
   };
 
-  const canCheckIn = () => {
-    const onDayNum = getDayOn();
-    //console.log(onDayNum);
-    //console.log(user.uid);
-    const checkedIn = goal["progress"][user.uid][onDayNum] >= goal["minimum"];
-    return checkedIn;
-  };
-
   const getProgress = () => {
     const onDayNum = getDayOn();
     const checkedIn = goal["progress"][user.uid][onDayNum];
@@ -262,13 +243,10 @@ const Goal = ({ goal, user }) => {
   };
 
   const saveProgress = (event, value) => {
-    //console.log(event.target.value);
     setProgress(event.target.value);
   };
 
   const updateProgress = (event, value) => {
-    //console.log(progress);
-    //console.log(typeof progress);
     const onDayNum = getDayOn();
     if (progress === "") {
       alert("Not a number");
@@ -283,17 +261,6 @@ const Goal = ({ goal, user }) => {
     }
   };
 
-  const makeProgress = () => {
-    const onDayNum = getDayOn();
-    db.child("goals")
-      .child(goal["key"])
-      .child("progress")
-      .child(user.uid)
-      .child(onDayNum)
-      .set(true);
-    setCheckedIn(true);
-  };
-
   const handleSliderChange = (e, newValue) => {
     const onDayNum = getDayOn();
     db.child("goals")
@@ -302,7 +269,6 @@ const Goal = ({ goal, user }) => {
       .child(user.uid)
       .child(onDayNum)
       .set(newValue);
-    // setCheckedIn(true);
   };
 
   const setReminder = () => {
@@ -352,173 +318,174 @@ const Goal = ({ goal, user }) => {
       badgeContent={<ClearIcon onClick={()=>setOpen(true)}/>} 
       color="primary"
       anchorOrigin={{
-      vertical: 'top',
-      horizontal: 'right',
-    }}
+        vertical: 'top',
+        horizontal: 'right',
+      }}
       >
-       <Dialog open={open} onClose={()=>setOpen(false)}>
-        <DialogContent>
-          Are you sure you want to delete this goal?
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={()=>setOpen(false)}>Cancel</Button>
-          <Button onClick={deleteGoal}>Delete</Button>
-        </DialogActions>
-      </Dialog>
-      <Card className={classes.root}>
-        <CardContent>
-          <div style={{ width: "70%", display: "inline-block" }}>
-            <Typography variant="h5" component="h2">
-              {goal["title"]}
-            </Typography>
-            <Typography className={classes.pos} color="textSecondary">
-              {goal["description"]}
-              <br></br>
-              Started: {goal["startDate"]}
-              <br></br>
-              Days Left: {goal["duration"] * 7 - getDayOn()}  
-              <br></br>
-            </Typography>
-          </div>
-          <div
-            style={{ width: "20%", display: "inline-block", float: "right" }}
-          >
-            <Table>
-              <TableBody>
-                <TableRow>
-                  <TableCell className={classes.ourSpecialBlue}>
-                    {" "}
-                    {/*user.displayName.split(' ')[0]*/ creatorName}
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className={classes.ourSpecialGreen}>
-                    {" "}
-                    {inviteeName}
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </div>
-          <div
-            ref={fullCardRef}
-            style={{
-              position: "relative",
-              height: backCircleRadius * 1.05,
-              width: "100%",
-            }}
-          >
+        <Dialog open={open} onClose={()=>setOpen(false)}>
+          <DialogContent>
+            Are you sure you want to delete this goal?
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={()=>setOpen(false)}>Cancel</Button>
+            <Button onClick={deleteGoal}>Delete</Button>
+          </DialogActions>
+        </Dialog>
+        <Card className={classes.root}>
+          <CardContent>
+            <div style={{ width: "70%", display: "inline-block" }}>
+              <Typography variant="h5" component="h2">
+                {goal["title"]}
+              </Typography>
+              <Typography className={classes.pos} color="textSecondary">
+                {goal["description"]}
+                <br></br>
+                Started: {goal["startDate"]}
+                <br></br>
+                Days Left: {goal["duration"] * 7 - getDayOn()}  
+                <br></br>
+              </Typography>
+            </div>
             <div
-              style={{
-                overflow: "visible",
-                position: "absolute",
-                left: backCircleLeft,
-                top: backCircleTop,
-                width: backCircleRadius,
-                height: backCircleRadius,
-              }}
-              className={clsx(classes.backCircle, classes.shapeCircle)}
-            />
-            <div
-              ref={goalCircleRef}
-              style={{
-                overflow: "visible",
-                position: "absolute",
-                left: goalCircleLeft,
-                top: goalCircleTop,
-                width: goalCircleRadius,
-                height: goalCircleRadius,
-              }}
-              className={clsx(classes.goalCircle, classes.shapeCircle)}
-            />
-            <div
-              ref={circle1Ref}
-              style={{
-                overflow: "visible",
-                position: "absolute",
-                left: circle1Left,
-                top: circle1Top,
-                width: circle1Radius,
-                height: circle1Radius,
-              }}
-              className={clsx(classes.shape1, classes.shapeCircle)}
-            />
-            <div
-              ref={circle2Ref}
-              style={{
-                overflow: "visible",
-                position: "absolute",
-                left: circle2Left,
-                top: circle2Top,
-                width: circle2Radius,
-                height: circle2Radius,
-              }}
-              className={clsx(classes.shape2, classes.shapeCircle)}
-            />
-          </div>
-
-          <h4
-            className={classes.marginless}
-            style={{ marginTop: "10px" }}
-            align="center"
-          >
-            Day {getDayOn()}         
-          </h4>
-          <br></br>
-          
-          <Container style={{ marginLeft: "auto", marginRight: "auto" }}>
-            <Typography id="discrete-slider" gutterBottom>
-              Daily Goal: {goal["minimum"]} {goal["metric"]}
-            </Typography>
-            <TextField
-              variant="outlined"
-              type="number"
-              onChange={saveProgress}
-              defaultValue={progress}
-            />
-          </Container>
-
-          {/* <Slider
-          style={{ width: "95%", marginLeft: "2%", float: "center" }}
-          defaultValue={5}
-          getAriaValueText={(value) => value}
-          aria-labelledby="discrete-slider"
-          valueLabelDisplay="auto"
-          step={1}
-          onChange={handleSliderChange}
-          marks
-          min={0}
-          max={15}
-        /> */}
-          <CardActions>
-            <Button
-              size="medium"
-              variant="contained"
-              color="primary"
-              style={{ marginTop: "5px", marginLeft: "23.5px" }}
-              onClick={updateProgress}
+              style={{ width: "20%", display: "inline-block", float: "right" }}
             >
-              Update Progress
-            </Button>
-          </CardActions>
+              <Table>
+                <TableBody>
+                  <TableRow>
+                    <TableCell className={classes.ourSpecialBlue}>
+                      {" "}
+                      {creatorName}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className={classes.ourSpecialGreen}>
+                      {" "}
+                      {inviteeName}
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
+            <div
+              ref={fullCardRef}
+              style={{
+                position: "relative",
+                height: backCircleRadius * 1.05,
+                width: "100%",
+              }}
+            >
+              <div
+                style={{
+                  overflow: "visible",
+                  position: "absolute",
+                  left: backCircleLeft,
+                  top: backCircleTop,
+                  width: backCircleRadius,
+                  height: backCircleRadius,
+                }}
+                className={clsx(classes.backCircle, classes.shapeCircle)}
+              />
+              <div
+                ref={goalCircleRef}
+                style={{
+                  overflow: "visible",
+                  position: "absolute",
+                  left: goalCircleLeft,
+                  top: goalCircleTop,
+                  width: goalCircleRadius,
+                  height: goalCircleRadius,
+                }}
+                className={clsx(classes.goalCircle, classes.shapeCircle)}
+              />
+              <div
+                ref={circle1Ref}
+                style={{
+                  overflow: "visible",
+                  position: "absolute",
+                  left: circle1Left,
+                  top: circle1Top,
+                  width: circle1Radius,
+                  height: circle1Radius,
+                }}
+                className={clsx(classes.shape1, classes.shapeCircle)}
+              />
+              <div
+                ref={circle2Ref}
+                style={{
+                  overflow: "visible",
+                  position: "absolute",
+                  left: circle2Left,
+                  top: circle2Top,
+                  width: circle2Radius,
+                  height: circle2Radius,
+                }}
+                className={clsx(classes.shape2, classes.shapeCircle)}
+              />
+            </div>
 
-          <div style={{padding:"5px", marginTop:"20px", marginBottom:"20px"}}>
-            <div style={{float:"left", marginRight: "10px"}}>
+            <h4
+              className={classes.marginless}
+              style={{ marginTop: "10px" }}
+              align="center"
+            >
+              Day {getDayOn()}         
+            </h4>
+            <br></br>
+            
+            <Container style={{ marginLeft: "auto", marginRight: "auto" }}>
+              <Typography id="discrete-slider" gutterBottom>
+                Daily Goal: {goal["minimum"]} {goal["metric"]}
+              </Typography>
+              <TextField
+                variant="outlined"
+                type="number"
+                onChange={saveProgress}
+                defaultValue={progress}
+              />
+            </Container>
+
+            {/* <Slider
+            style={{ width: "95%", marginLeft: "2%", float: "center" }}
+            defaultValue={5}
+            getAriaValueText={(value) => value}
+            aria-labelledby="discrete-slider"
+            valueLabelDisplay="auto"
+            step={1}
+            onChange={handleSliderChange}
+            marks
+            min={0}
+            max={15}
+            /> */}
+
+            <CardActions>
               <Button
-                  size="small"
-                  variant="contained"
-                  color="secondary"
-                  onClick={setReminder}
-                >
-                Remind Friend
+                size="medium"
+                variant="contained"
+                color="primary"
+                style={{ marginTop: "5px", marginLeft: "23.5px" }}
+                onClick={updateProgress}
+              >
+                Update Progress
               </Button>
+            </CardActions>
+
+            <div style={{padding:"5px", marginTop:"20px", marginBottom:"20px"}}>
+              <div style={{float:"left", marginRight: "10px"}}>
+                <Button
+                    size="small"
+                    variant="contained"
+                    color="secondary"
+                    onClick={setReminder}
+                  >
+                  Remind Friend
+                </Button>
+              </div>
+              <div style={{float:"right"}}>
+                <SeeMore goal={goal} />
+              </div>
             </div>
-            <div style={{float:"right"}}>
-              <SeeMore goal={goal} />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
       </Badge>
     </Badge>
   );

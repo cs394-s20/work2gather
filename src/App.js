@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import { makeStyles } from '@material-ui/core/styles';
-import Goal from './Card/Goal'
-import Invite from './Card/Invite'
-import AddGoal from './AddGoal';
 import Button from '@material-ui/core/Button';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
+import Goal from './Card/Goal'
+import AddGoal from './AddGoal';
+import GoalGrid from './GoalGrid';
 import firebase from './shared/firebase'
-
 
 const db = firebase.database().ref();
 
@@ -26,20 +24,8 @@ const uiConfig = {
 };
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
   title: {
     flexGrow: 1,
-  },
-  gridcontainer:{
-    // marginTop: 50
-  },
-  griditem: {
-    // marginBottom: -60
   }
 }));
 
@@ -136,56 +122,5 @@ const App = () => {
     </div>
   );
 }
-
-
-const GoalGrid = ({ goals, invites, user }) => {
-  let classes = useStyles();
-  const [unfinished, setUnfinished] = useState([]);
-  const [pending, setPending] = useState([]);
-  const [invitelist, setInvitelist] = useState([]);
-
-  useEffect(() => {
-    let unfinished_temp = [];
-    let pending_temp = [];
-    let invitelist_temp = [];
-
-    Object.values(goals).map(goal => goal.confirmed ? unfinished_temp.push(goal) : pending_temp.push(goal));
-    Object.values(invites).map(goal => goal.confirmed ?  unfinished_temp.push(goal) : invitelist_temp.push(goal));
-
-    setUnfinished(unfinished_temp);
-    setPending(pending_temp);
-    setInvitelist(invitelist_temp);
-  }, [goals]);
-  
-  return (
-    <React.Fragment>
-      <Grid container spacing={3} direction="row" justify="flex-start">
-        <Grid item xs={12} className={classes.griditem}><Typography variant="h4">Unfinished Goals</Typography></Grid>
-        {unfinished.map(goals =>
-          <Grid item xs={4}>
-            <Goal goal={goals} user={user} key={goals.key} />
-          </Grid>
-        )}
-      </Grid>
-      <Grid container className={classes.gridcontainer} spacing={3} direction="row" justify="flex-start">
-        <Grid item xs={12} className={classes.griditem}><Typography variant="h4">Pending Goals</Typography></Grid>
-        {pending.map(goals =>
-          <Grid item xs={4}>
-            <Goal goal={goals} user={user} key={goals.key} />
-          </Grid>
-        )}
-      </Grid>
-      <Grid container className={classes.gridcontainer} spacing={3} direction="row" justify="flex-start">
-        <Grid item xs={12} className={classes.griditem}><Typography variant="h4">New Invitation</Typography></Grid>
-        {invitelist.map(goals =>
-          <Grid item xs={4}>
-            <Invite goal={goals} user={user} key={goals.key} />
-          </Grid>
-        )}
-      </Grid>
-    </React.Fragment>
-  );
-};
-
 
 export default App;

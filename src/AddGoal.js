@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
@@ -7,7 +8,6 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import { makeStyles } from "@material-ui/core/styles";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
 import {
@@ -48,7 +48,6 @@ const AddGoal = ({ open, user, setOpen, emailTouid }) => {
   };
 
   const handleSubmit = () => {
-    //add date to goals
     //console.log(title);
     //console.log(metric);
     //console.log(minimum);
@@ -73,20 +72,13 @@ const AddGoal = ({ open, user, setOpen, emailTouid }) => {
         alert("The user does not exist. Please try again.");
       } else {
         alert("Success! New Goal Created!");
-        console.log(typeof selectedDate);
-
         var dt = selectedDate.toLocaleString("en-US", {
           timeZone: "America/Chicago",
         });
-        //console.log(selectedDate);
         var myJSON = JSON.stringify(dt);
-        //console.log(myJSON);
         var timeNow = myJSON.split('"')[1].split(",")[0];
-
         var myRef = db.child("goals").push();
         var key = myRef.key;
-
-        //console.log(typeof user.uid);
 
         var newData = {
           confirmed: false,
@@ -119,6 +111,7 @@ const AddGoal = ({ open, user, setOpen, emailTouid }) => {
 
         //add goal to invitee
         db.child("users").child(emailTouid[temp]).child("invites").child(key).set(key);
+        
         handleClose();
       }
     }
