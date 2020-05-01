@@ -37,32 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
-const data = [
-  {
-    name: '1', uv: 40, pv: 24, 
-  },
-  {
-    name: '2', uv: 30, pv: 13, 
-  },
-  {
-    name: '3', uv: 20, pv: 98,
-  },
-  {
-    name: '4', uv: 27, pv: 39, 
-  },
-  {
-    name: '5', uv: 18, pv: 48, 
-  },
-  {
-    name: '6', uv: 23, pv: 38, 
-  },
-  {
-    name: '7', uv: 90, pv: 43, 
-  },
-];
-
-export default function MaxWidthDialog({ goal }) {
+export default function SeeMore({ goal }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [goalData, setGoalData] = useState([]);
@@ -93,8 +68,8 @@ export default function MaxWidthDialog({ goal }) {
   return (
     <React.Fragment>
      <div>
-     <div style={{float: 'right'}}>
-      <Button  variant="outlined" color="primary" onClick={handleClickOpen}>
+     <div>
+      <Button  size="small" variant="outlined" color="primary" onClick={handleClickOpen}>
       See More
       </Button>
       </div>

@@ -12,11 +12,10 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import firebase from "../shared/firebase";
 import Slider from "@material-ui/core/Slider";
 import { TextField } from "@material-ui/core";
 import Container from "@material-ui/core/Container";
-import MaxWidthDialog from "./SeeMore"
+import SeeMore from "./SeeMore"
 import clsx from 'clsx';
 import Badge from '@material-ui/core/Badge';
 import ClearIcon from '@material-ui/icons/Clear';
@@ -25,6 +24,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import firebase from "../shared/firebase";
 
 const db = firebase.database().ref();
 
@@ -37,6 +37,7 @@ const useStyles = makeStyles({
     // overflow: "auto",
     // marginTop: "50px",
     // display: "inline-block",
+    border: "1px solid black"
   },
   bullet: {
     display: "inline-block",
@@ -62,18 +63,15 @@ const useStyles = makeStyles({
     size: "small",
     backgroundColor: "#14ECF5", //our own special blue
     border: "1px solid black",
-    // width: "10%",
   },
   progressFilled2: {
     size: "small",
     backgroundColor: "#14F58E", //our own special green
     border: "1px solid black",
-    // width: "10%",
   },
   progressUnfilled: {
     size: "small",
     border: "1px solid black",
-    // width: "10px",
   },
   pos: {
     marginBottom: 12,
@@ -83,12 +81,11 @@ const useStyles = makeStyles({
     padding: "5px",
   },
   ourSpecialGreen: {
-    backgroundColor: "#14F58E", //our own special red
+    backgroundColor: "#14F58E", //our own special green
     padding: "5px",
   },
   weekDays: {
     size: "small",
-    // border: "1px solid black",
     borderBottom: "1px solid black",
     paddingBottom: "0px",
     paddingTop: "10px",
@@ -97,7 +94,6 @@ const useStyles = makeStyles({
   },
   onDays: {
     size: "small",
-    // border: "1px solid black",
     borderBottom: "1px solid black",
     paddingBottom: "0px",
     paddingTop: "10px",
@@ -187,9 +183,7 @@ const Goal = ({ goal, user }) => {
           .child(users[0])
           .child(j)
           .set(0);
-        console.log(
-          "updating db for goal " + goal.key + " for user " + users[0]
-        );
+        //console.log("updating db for goal " + goal.key + " for user " + users[0]);
       }
       if (goal["progress"][users[1]][j] == undefined) {
         db.child("goals")
@@ -198,9 +192,7 @@ const Goal = ({ goal, user }) => {
           .child(users[1])
           .child(j)
           .set(0);
-        console.log(
-          "updating db for goal " + goal.key + " for user " + users[1]
-        );
+        //console.log("updating db for goal " + goal.key + " for user " + users[1]);
       }
     }
   }, []);
@@ -218,8 +210,8 @@ const Goal = ({ goal, user }) => {
       0.3 *
       (goal["progress"][goal["groupMembers"]["creator"]][getDayOn()] /
         goal["minimum"]);
-    console.log("lebelo cinco: " + goal["progress"][user.uid][getDayOn()]);
-    console.log("lebelo sixo: " + goal["progress"]["minimum"]);
+    //console.log("lebelo cinco: " + goal["progress"][user.uid][getDayOn()]);
+    //console.log("lebelo sixo: " + goal["progress"]["minimum"]);
     const goalRadius = fullCardWidth * 0.3;
     const backRadius = fullCardWidth * 0.31;
 
@@ -257,8 +249,8 @@ const Goal = ({ goal, user }) => {
 
   const canCheckIn = () => {
     const onDayNum = getDayOn();
-    console.log(onDayNum);
-    console.log(user.uid);
+    //console.log(onDayNum);
+    //console.log(user.uid);
     const checkedIn = goal["progress"][user.uid][onDayNum] >= goal["minimum"];
     return checkedIn;
   };
@@ -270,13 +262,13 @@ const Goal = ({ goal, user }) => {
   };
 
   const saveProgress = (event, value) => {
-    console.log(event.target.value);
+    //console.log(event.target.value);
     setProgress(event.target.value);
   };
 
   const updateProgress = (event, value) => {
-    console.log(progress);
-    console.log(typeof progress);
+    //console.log(progress);
+    //console.log(typeof progress);
     const onDayNum = getDayOn();
     if (progress === "") {
       alert("Not a number");
@@ -314,7 +306,7 @@ const Goal = ({ goal, user }) => {
   };
 
   const setReminder = () => {
-    alert("you have reminded your friend");
+    alert("You have reminded your friend!");
     const onDayNum = getDayOn();
     if (user.uid === goal.groupMembers.creator) {
       db.child("goals")
@@ -344,21 +336,7 @@ const Goal = ({ goal, user }) => {
     db.child('goals').child(goal.key).set(null);
   }
 
-  // console.log("getDayOn" + getDayOn());
-  // console.log("lastRemindDay" + lastRemindDay);
-  // console.log(
-  //   "goal[progress][user.uid][getDayOn()]" +
-  //     goal["progress"][user.uid][getDayOn()]
-  // );
-  // console.log("goal[minimum]" + goal["minimum"]);
-
   return (
-    // const onDayNum = getDayOn();
-    // if (user.uid === goal.groupMembers.creator)
-    // invisible={
-    //   getDayOn() === lastRemindDay &&
-    //   goal["progress"][user.id][getDayOn()] < goal["minimum"]
-    // }
     <Badge
       anchorOrigin={{ vertical: "top", horizontal: "left" }}
       color="secondary"
@@ -397,6 +375,9 @@ const Goal = ({ goal, user }) => {
               {goal["description"]}
               <br></br>
               Started: {goal["startDate"]}
+              <br></br>
+              Days Left: {goal["duration"] * 7 - getDayOn()}  
+              <br></br>
             </Typography>
           </div>
           <div
@@ -475,38 +456,26 @@ const Goal = ({ goal, user }) => {
               className={clsx(classes.shape2, classes.shapeCircle)}
             />
           </div>
-          {/*<ProgressGrid />*/}
 
           <h4
             className={classes.marginless}
             style={{ marginTop: "10px" }}
             align="center"
           >
-            Day {getDayOn()}
+            Day {getDayOn()}         
           </h4>
-
-          <Typography id="discrete-slider" gutterBottom>
-            {goal["metric"]}:{console.log("cheese: " + user.uid)}
-          </Typography>
+          <br></br>
+          
           <Container style={{ marginLeft: "auto", marginRight: "auto" }}>
-            {/* {" "} */}
+            <Typography id="discrete-slider" gutterBottom>
+              Daily Goal: {goal["minimum"]} {goal["metric"]}
+            </Typography>
             <TextField
-              id="outlined-basic"
-              label="Outlined"
               variant="outlined"
               type="number"
               onChange={saveProgress}
               defaultValue={progress}
             />
-            <Button
-              size="small"
-              variant="contained"
-              color="primary"
-              style={{ width: "70px", float: "right", marginTop: "30px" }}
-              onClick={setReminder}
-            >
-              Remind Friends
-            </Button>
           </Container>
 
           {/* <Slider
@@ -521,20 +490,33 @@ const Goal = ({ goal, user }) => {
           min={0}
           max={15}
         /> */}
-
           <CardActions>
             <Button
               size="medium"
               variant="contained"
               color="primary"
-              // style={{ marginLeft: "auto", marginRight: "auto" }}
               style={{ marginTop: "5px", marginLeft: "23.5px" }}
               onClick={updateProgress}
             >
               Update Progress
             </Button>
           </CardActions>
-          <MaxWidthDialog goal={goal} />
+
+          <div style={{padding:"5px", marginTop:"20px", marginBottom:"20px"}}>
+            <div style={{float:"left", marginRight: "10px"}}>
+              <Button
+                  size="small"
+                  variant="contained"
+                  color="secondary"
+                  onClick={setReminder}
+                >
+                Remind Friend
+              </Button>
+            </div>
+            <div style={{float:"right"}}>
+              <SeeMore goal={goal} />
+            </div>
+          </div>
         </CardContent>
       </Card>
       </Badge>

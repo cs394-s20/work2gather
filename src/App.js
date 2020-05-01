@@ -4,13 +4,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import Goal from './Card/Goal'
 import Invite from './Card/Invite'
 import AddGoal from './AddGoal';
-import firebase from './shared/firebase'
 import Button from '@material-ui/core/Button';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
+import firebase from './shared/firebase'
+
 
 const db = firebase.database().ref();
 
@@ -62,6 +63,7 @@ const Welcome = ({ user }) => {
     </React.Fragment>
   );
 };
+
 const SignIn = () => (
   <StyledFirebaseAuth
     uiConfig={uiConfig}
@@ -81,7 +83,6 @@ const App = () => {
   const [user, setUser] = useState({});
   const [emailTouid, setEmailTouid] = useState({});
   const [open, setOpen] = useState(false);
-  const apple = 0; 
 
   var goals = Object.values(goalsJSON);
 
@@ -144,7 +145,6 @@ const GoalGrid = ({ goals, invites, user }) => {
   const [invitelist, setInvitelist] = useState([]);
 
   useEffect(() => {
-    console.log( "grid invite" +  invitelist);
     let unfinished_temp = [];
     let pending_temp = [];
     let invitelist_temp = [];

@@ -49,10 +49,10 @@ const AddGoal = ({ open, user, setOpen, emailTouid }) => {
 
   const handleSubmit = () => {
     //add date to goals
-    console.log(title);
-    console.log(metric);
-    console.log(minimum);
-    console.log(duration);
+    //console.log(title);
+    //console.log(metric);
+    //console.log(minimum);
+    //console.log(duration);
     if (
       title === undefined ||
       metric === undefined ||
@@ -65,28 +65,28 @@ const AddGoal = ({ open, user, setOpen, emailTouid }) => {
       duration === "" ||
       email === ""
     ) {
-      alert("Please fill all fields");
+      alert("Please fill in all fields.");
     } else {
       let rg = /\./g;
       let temp = email.replace(rg, ",");
       if (!emailTouid[temp]) {
-        alert("The user does not exist");
+        alert("The user does not exist. Please try again.");
       } else {
-        alert("success");
+        alert("Success! New Goal Created!");
         console.log(typeof selectedDate);
 
         var dt = selectedDate.toLocaleString("en-US", {
           timeZone: "America/Chicago",
         });
-        console.log(selectedDate);
+        //console.log(selectedDate);
         var myJSON = JSON.stringify(dt);
-        console.log(myJSON);
+        //console.log(myJSON);
         var timeNow = myJSON.split('"')[1].split(",")[0];
 
         var myRef = db.child("goals").push();
         var key = myRef.key;
 
-        console.log(typeof user.uid);
+        //console.log(typeof user.uid);
 
         var newData = {
           confirmed: false,
@@ -94,7 +94,6 @@ const AddGoal = ({ open, user, setOpen, emailTouid }) => {
           title: title,
           startDate: timeNow,
           duration: duration,
-          // endDate: "",
           groupMembers: {
             creator: user.uid,
             invitee: emailTouid[temp],
@@ -154,21 +153,21 @@ const AddGoal = ({ open, user, setOpen, emailTouid }) => {
             label="Goal Title"
             fullWidth
             onChange={(event) => setTitle(event.target.value)}
-            placeholder="What will you do every day to reach your goal (i.e. 10 pushups a day)"
+            placeholder="What will you do every day to reach your goal? (e.g. Do 10 pushups a day)"
           />
           <TextField
             margin="dense"
             label="Goal Metric"
             fullWidth
             onChange={(event) => setMetric(event.target.value)}
-            placeholder="Unit(i.e. # of pushups)"
+            placeholder="What unit will you measure everyday? (e.g. pushups done, minutes spent, chores completed)"
           />
           <TextField
             margin="dense"
             label="Daily Minimum"
             fullWidth
             onChange={(event) => setMinimum(event.target.value)}
-            placeholder="Minimum for each day needed to complete your goal"
+            placeholder="How much do you need to do each day to complete your daily goal? (e.g. 10)"
             type="number"
           />
           <TextField
@@ -176,7 +175,7 @@ const AddGoal = ({ open, user, setOpen, emailTouid }) => {
             label="Goal Duration"
             fullWidth
             onChange={(event) => setDuration(event.target.value)}
-            placeholder="how many weeks will you perform your goal(i.e. # of weeks)"
+            placeholder="How many weeks will you work on your goal?(e.g. 2)"
             type="number"
           />
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -194,10 +193,10 @@ const AddGoal = ({ open, user, setOpen, emailTouid }) => {
           </MuiPickersUtilsProvider>
           <TextField
             margin="dense"
-            label="Invite your friend"
+            label="Invite Your Friend"
             fullWidth
             onChange={(event) => setEmail(event.target.value)}
-            placeholder="input the email of your friend"
+            placeholder="Please provide your friend's email address."
           />
         </DialogContent>
         <DialogActions>

@@ -11,7 +11,7 @@ import firebase from "../shared/firebase";
 
 const db = firebase.database().ref();
 
-  const useStyles = makeStyles({
+const useStyles = makeStyles({
   root: {
     marginTop: "50px",
   },
@@ -39,18 +39,15 @@ const db = firebase.database().ref();
     size: "small",
     backgroundColor: "#14ECF5", //our own special blue
     border: "1px solid black",
-    // width: "10%",
   },
   progressFilled2: {
     size: "small",
     backgroundColor: "#14F58E", //our own special green
     border: "1px solid black",
-    // width: "10%",
   },
   progressUnfilled: {
     size: "small",
     border: "1px solid black",
-    // width: "10px",
   },
   pos: {
     marginBottom: 12,
@@ -60,7 +57,7 @@ const db = firebase.database().ref();
     padding: "5px",
   },
   ourSpecialGreen: {
-    backgroundColor: "#14F58E", //our own special red
+    backgroundColor: "#14F58E", //our own special green
     padding: "5px",
   },
   weekDays: {
@@ -83,7 +80,6 @@ const db = firebase.database().ref();
   shape1: {
     backgroundColor: "#14ECF5",
     opacity: 0.5,
-
   },
   shape2: {
     backgroundColor: "#14F58E",
@@ -134,7 +130,7 @@ const Invite = ({ goal, user }) => {
           .child(users[0])
           .child(j)
           .set(0);
-          console.log("updating db for goal " + goal.key + " for user " + users[0])
+          //console.log("updating db for goal " + goal.key + " for user " + users[0])
       }
       if(goal["progress"][users[1]][j] == undefined){
         db.child("goals")
@@ -143,7 +139,7 @@ const Invite = ({ goal, user }) => {
           .child(users[1])
           .child(j)
           .set(0);
-          console.log("updating db for goal " + goal.key + " for user " + users[1])
+          //console.log("updating db for goal " + goal.key + " for user " + users[1])
 
       }
     }
@@ -153,8 +149,8 @@ const Invite = ({ goal, user }) => {
     setProgress(getProgress);
     const fullCardWidth = fullCardRef.current.offsetWidth;
     const circle1Radius = (fullCardWidth*0.30) * (goal["progress"][user.uid][getDayOn()] / goal["minimum"])
-    console.log("lebelo cinco: " + goal["progress"][user.uid][getDayOn()])
-    console.log("lebelo sixo: " + goal["progress"]['minimum'])
+    //console.log("lebelo cinco: " + goal["progress"][user.uid][getDayOn()])
+    //console.log("lebelo sixo: " + goal["progress"]['minimum'])
     const goalRadius =  fullCardWidth * 0.3;
     const backRadius = fullCardWidth * 0.31; 
 
