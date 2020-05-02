@@ -11,7 +11,7 @@ const db = firebase.database().ref();
 
 const useStyles = makeStyles({
   root: {
-    width:"55%"
+    width:"280px"
   },
   title: {
     fontSize: 14,
@@ -81,7 +81,7 @@ const Invite = ({ goal, user }) => {
   return (
     <Card className={classes.root}>
       <CardContent>
-        <div style={{ width: "70%", display: "inline-block" }}>
+        <div style={{display: "inline-block" }}>
           <Typography variant="h5" component="h2">
             {goal["title"]}
           </Typography>
