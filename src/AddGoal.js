@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
 
 const AddGoal = ({ open, user, setOpen, emailTouid }) => {
   const [title, setTitle] = useState();
+  const [description, setDescription] = useState();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [metric, setMetric] = useState();
   const [minimum, setMinimum] = useState();
@@ -49,16 +50,19 @@ const AddGoal = ({ open, user, setOpen, emailTouid }) => {
 
   const handleSubmit = () => {
     //console.log(title);
+    //console.log(description);
     //console.log(metric);
     //console.log(minimum);
     //console.log(duration);
     if (
       title === undefined ||
+      description === undefined ||
       metric === undefined ||
       minimum === undefined ||
       duration === undefined ||
       email === undefined ||
       title === "" ||
+      description === "" ||
       metric === "" ||
       minimum === "" ||
       duration === "" ||
@@ -84,6 +88,7 @@ const AddGoal = ({ open, user, setOpen, emailTouid }) => {
           confirmed: false,
           key: key,
           title: title,
+          description: description,
           startDate: timeNow,
           duration: duration,
           groupMembers: {
@@ -146,21 +151,30 @@ const AddGoal = ({ open, user, setOpen, emailTouid }) => {
             label="Goal Title"
             fullWidth
             onChange={(event) => setTitle(event.target.value)}
-            placeholder="What will you do every day to reach your goal? (e.g. Do 10 pushups a day)"
+            placeholder="What's your goal focus? (e.g. Reading, Meditation, Daily Pushups)"
+            inputProps={{maxLength: 15}}
+          />
+          {/* Goal Description Added to SeeMore? */}
+          <TextField
+            margin="dense"
+            label="Goal Description"
+            fullWidth
+            onChange={(event) => setDescription(event.target.value)}
+            placeholder="What will you do every day to reach your goal? Set S.M.A.R.T goals!"
           />
           <TextField
             margin="dense"
             label="Goal Metric"
             fullWidth
             onChange={(event) => setMetric(event.target.value)}
-            placeholder="What unit will you measure everyday? (e.g. pushups done, minutes spent, chores completed)"
+            placeholder="What unit will you measure everyday? (e.g. pushups done, minutes spent)"
           />
           <TextField
             margin="dense"
             label="Daily Minimum"
             fullWidth
             onChange={(event) => setMinimum(event.target.value)}
-            placeholder="How much do you need to do each day to complete your daily goal? (e.g. 10)"
+            placeholder="How much do you need to do to complete your daily goal? (e.g. 10)"
             type="number"
           />
           <TextField
@@ -189,7 +203,7 @@ const AddGoal = ({ open, user, setOpen, emailTouid }) => {
             label="Invite Your Friend"
             fullWidth
             onChange={(event) => setEmail(event.target.value)}
-            placeholder="Please provide your friend's email address."
+            placeholder="Who do you want to work with? Please provide your friend's email address."
           />
         </DialogContent>
         <DialogActions>

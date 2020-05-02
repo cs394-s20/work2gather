@@ -29,6 +29,14 @@ export default function SeeMore({ goal }) {
   const [open, setOpen] = React.useState(false);
   const [goalData, setGoalData] = useState([]);
 
+  const getDayOn = () => {
+    var startdate = new Date(goal["startDate"]);
+    var currentdate = new Date();
+    let deltatime = currentdate.getTime() - startdate.getTime();
+    let deltadays = Math.floor(deltatime / (1000 * 3600 * 24));
+    return deltadays;
+  };
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -69,14 +77,20 @@ export default function SeeMore({ goal }) {
         open={open}
         onClose={handleClose}
         aria-labelledby="max-width-dialog-title"
+        style={{overflow:"scrollbar"}}
       >
         <DialogTitle id="max-width-dialog-title">{goal.title}</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-          	{goal.description}
-          </DialogContentText>
           <div>
             <div style={{float:'left'}}>
+              <DialogContentText>
+                {goal.description}
+                <br></br>
+                Started: {goal.startDate}
+                <br></br>
+                Days Left: {goal.duration * 7 - getDayOn()}
+                <br></br>
+              </DialogContentText>
             </div>
             <div style={{float: 'right'}}>
               <LineChart

@@ -8,10 +8,18 @@ import Invite from './Card/Invite'
 
 const useStyles = makeStyles((theme) => ({
   gridcontainer:{
-    // marginTop: 50
+    marginTop: "5px"
   },
   griditem: {
-    // marginBottom: -60
+    marginTop: "5px",
+    marginBottom:"5px"
+  },
+  carditem:{
+    marginLeft: "25px", 
+    marginRight:"25px"
+  },
+  inviteitem:{
+    maxWidth:"50%"
   }
 }));
 
@@ -36,27 +44,27 @@ const GoalGrid = ({ goals, invites, user }) => {
   
   return (
     <React.Fragment>
-      <Grid container spacing={3} direction="row" justify="flex-start">
-        <Grid item xs={12} className={classes.griditem}><Typography variant="h4">Unfinished Goals</Typography></Grid>
+      <Grid container className={classes.gridcontainer} spacing={3} direction="row" justify="flex-start">
+        <Grid item xs={12} className={classes.griditem}><Typography variant="h4">To-Do Goals</Typography></Grid>
         {unfinished.map(goals =>
-          <Grid item xs={4}>
+          <Grid item className={classes.carditem}>
             <Goal goal={goals} user={user} key={goals.key} />
           </Grid>
         )}
       </Grid>
       <Grid container className={classes.gridcontainer} spacing={3} direction="row" justify="flex-start">
-        <Grid item xs={12} className={classes.griditem}><Typography variant="h4">Pending Goals</Typography></Grid>
+        <Grid item xs={12} className={classes.griditem}><Typography variant="h4">Pending Invites</Typography></Grid>
         {pending.map(goals =>
-          <Grid item xs={4}>
+          <Grid item className={classes.carditem}>
             <Goal goal={goals} user={user} key={goals.key} />
           </Grid>
         )}
       </Grid>
       <Grid container className={classes.gridcontainer} spacing={3} direction="row" justify="flex-start">
-        <Grid item xs={12} className={classes.griditem}><Typography variant="h4">New Invitation</Typography></Grid>
+        <Grid item xs={12} className={classes.griditem}><Typography variant="h4">New Invites</Typography></Grid>
         {invitelist.map(goals =>
-          <Grid item xs={4}>
-            <Invite goal={goals} user={user} key={goals.key} />
+          <Grid item className={classes.inviteitem}>
+            <Invite goal={goals} user={user} key={goals.key}/>
           </Grid>
         )}
       </Grid>

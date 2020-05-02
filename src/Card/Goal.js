@@ -29,8 +29,8 @@ const db = firebase.database().ref();
 
 const useStyles = makeStyles({
   root: {
-    // maxWidth: "65%",
-    // minWidth: "35%",
+    margin: "auto",
+    minWidth: "35%",
     // marginLeft: "5%",
     // marginRight: "5%",
     // overflow: "auto",
@@ -333,12 +333,11 @@ const Goal = ({ goal, user }) => {
         </Dialog>
         <Card className={classes.root}>
           <CardContent>
-            <div style={{ width: "70%", display: "inline-block" }}>
+            <div style={{ width: "80%", display: "inline-block" }}>
               <Typography variant="h5" component="h2">
                 {goal["title"]}
               </Typography>
               <Typography className={classes.pos} color="textSecondary">
-                {goal["description"]}
                 <br></br>
                 Started: {goal["startDate"]}
                 <br></br>

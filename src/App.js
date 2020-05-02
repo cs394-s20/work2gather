@@ -115,6 +115,7 @@ const App = () => {
     <div>
       <Banner user={user} title="Work2Gather">
       </Banner>
+      <br></br>
       {user ? <AddGoal open={open} user={user} setOpen={setOpen} emailTouid={emailTouid} /> : null}
       {user ? <Container maxWidth="xl">
         <GoalGrid goals={goals} invites={invites} user={user} />

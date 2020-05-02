@@ -11,7 +11,7 @@ const db = firebase.database().ref();
 
 const useStyles = makeStyles({
   root: {
-    width:"100%"
+    width:"55%"
   },
   title: {
     fontSize: 14,
