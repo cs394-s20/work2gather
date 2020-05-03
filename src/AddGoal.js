@@ -85,6 +85,7 @@ const AddGoal = ({ open, user, setOpen, emailTouid }) => {
         var key = myRef.key;
 
         var newData = {
+          deleted: false,
           confirmed: false,
           key: key,
           title: title,

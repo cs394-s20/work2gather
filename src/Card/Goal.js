@@ -297,9 +297,15 @@ const Goal = ({ goal, user }) => {
   };
 
   const deleteGoal = () => {
-    db.child('users').child(goal.groupMembers.creator).child('goals').child(goal.key).set(null);
-    db.child('users').child(goal.groupMembers.invitee).child('invites').child(goal.key).set(null);
-    db.child('goals').child(goal.key).set(null);
+    if(user.uid===goal.groupMembers.creator) {
+      db.child('users').child(goal.groupMembers.creator).child('goals').child(goal.key).set(null);
+      db.child('goals').child(goal.key).child('deleted').set(true);
+    }
+    else {
+      db.child('users').child(goal.groupMembers.invitee).child('invites').child(goal.key).set(null);
+      db.child('goals').child(goal.key).child('deleted').set(true);
+    }
+    // db.child('goals').child(goal.key).set(null);
   }
 
   return (
@@ -430,7 +436,7 @@ const Goal = ({ goal, user }) => {
               Day {getDayOn()}         
             </h4>
             <br></br>
-            
+            {goal.deleted?<p>Your friend has removed the goal.</p>:null}
             <Container style={{ marginLeft: "auto", marginRight: "auto" }}>
               <Typography id="discrete-slider" gutterBottom>
                 Daily Goal: {goal["minimum"]} {goal["metric"]}
