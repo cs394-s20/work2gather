@@ -57,8 +57,8 @@ export default function SeeMore({ goal }) {
     for(let j = 0; j < goal["progress"][users[0]].length; j++){
       let entry = {
         name: j.toString(), 
-        uv: goal["progress"][users[0]][j],
-        pv: goal["progress"][users[1]][j],
+        uv: goal["progress"][goal["groupMembers"]["creator"]][j],
+        pv: goal["progress"][goal["groupMembers"]["invitee"]][j],
       }
       tempData.push(entry); 
     }
@@ -164,8 +164,8 @@ export default function SeeMore({ goal }) {
                 <YAxis className={classes.yaxis} label={{value: goal.metric, angle: -90, position: 'left'}}/>
                 <Tooltip />
                 <Legend verticalAlign="top" height={36}/>
-                <Bar name="Suzy Q." dataKey="pv" fill="#8884d8" />
-                <Bar name="Jonny P." dataKey="uv" fill="#82ca9d" />
+                <Bar name={creatorName} dataKey="uv" fill="#8884d8" />
+                <Bar name={inviteeName} dataKey="pv" fill="#82ca9d" />
                 <ReferenceLine y={goal["minimum"]} label="Goal" stroke="green" strokeDasharray='5 5'  />
               </BarChart>
               :
@@ -195,8 +195,8 @@ export default function SeeMore({ goal }) {
                 <CartesianGrid strokeDasharray="3 3" />
                 <Tooltip />
                 <Legend verticalAlign="top" height={36}/>
-                <Area name="Suzy Q." type="monotone" dataKey="uv" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)" />
-                <Area name="Jonny P." type="monotone" dataKey="pv" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" />
+                <Area name={creatorName} type="monotone" dataKey="uv" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)" />
+                <Area name={inviteeName} type="monotone" dataKey="pv" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" />
                 <ReferenceLine y={goal["minimum"]} label="Goal" stroke="green" strokeDasharray='5 5'  />
               </AreaChart>}
             </div>
