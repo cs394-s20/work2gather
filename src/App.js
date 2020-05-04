@@ -10,6 +10,7 @@ import Goal from './Card/Goal'
 import AddGoal from './AddGoal';
 import GoalGrid from './GoalGrid';
 import firebase from './shared/firebase'
+import ToggleButtons from './Toggle'
 
 const db = firebase.database().ref();
 
@@ -36,12 +37,12 @@ const Welcome = ({ user }) => {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h5" className={classes.title}>
-              Work2Gather
+            Work2Gather
           </Typography>
-          <Typography variant="h6" style={{float:"center", marginRight: 30}}>
+          <Typography variant="h6" style={{ float: "center", marginRight: 30 }}>
             Welcome, {user.displayName ? user.displayName.split(' ')[0] : ""}
           </Typography>
-          <Button style={{fontSize:21}} color="inherit" onClick={() => firebase.auth().signOut()}>
+          <Button style={{ fontSize: 21 }} color="inherit" onClick={() => firebase.auth().signOut()}>
             Log out
           </Button>
         </Toolbar>
@@ -84,21 +85,21 @@ const App = () => {
           let email = user.email.replace(re, ',')
           db.child('emailTouid/' + email).set(user.uid);
           setEmailTouid(snap.val().emailTouid);
-          if(!snap.val().users[user.uid]){
+          if (!snap.val().users[user.uid]) {
             db.child("users").child(user.uid).child("name").set(user.displayName);
           }
-          if(snap.val().users[user.uid]&&snap.val().users[user.uid].goals){
+          if (snap.val().users[user.uid] && snap.val().users[user.uid].goals) {
             let goals_arr = snap.val().users[user.uid].goals;
             setGoals(Object.values(goals_arr).map(goal => snap.val().goals[goal]));
           }
-          else{
+          else {
             setGoals({});
           }
           if (snap.val().users[user.uid] && snap.val().users[user.uid].invites) {
             let invites_arr = snap.val().users[user.uid].invites;
             setInvite(Object.values(invites_arr).map(goal => snap.val().goals[goal]));
           }
-          else{
+          else {
             setInvite({});
           }
         }
