@@ -7,8 +7,9 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {
-  LineChart, Label, ReferenceLine, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+  AreaChart, Area, BarChart, Bar, LineChart, Label, ReferenceLine, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
 } from 'recharts';
+import ToggleButtonsView from './ToggleView';
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -28,6 +29,7 @@ export default function SeeMore({ goal }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [goalData, setGoalData] = useState([]);
+  const [showView, setShowView] = React.useState('LINE');
 
   const getDayOn = () => {
     var startdate = new Date(goal["startDate"]);
@@ -79,7 +81,14 @@ export default function SeeMore({ goal }) {
         aria-labelledby="max-width-dialog-title"
         style={{overflow:"scrollbar"}}
       >
-        <DialogTitle id="max-width-dialog-title">{goal.title}</DialogTitle>
+        <div>
+          <div style={{float:"left"}}>
+            <DialogTitle id="max-width-dialog-title">{goal.title}</DialogTitle>
+          </div>
+          <div style={{float:"right", margin:"10px"}}>
+            <ToggleButtonsView showView={showView} setShowView={setShowView}/>
+          </div>
+        </div>
         <DialogContent>
           <div>
             <div style={{float:'left'}}>
@@ -93,6 +102,7 @@ export default function SeeMore({ goal }) {
               </DialogContentText>
             </div>
             <div style={{float: 'right'}}>
+              { (showView === "LINE") ?
               <LineChart
                 width={500}
                 height={300}
@@ -113,6 +123,59 @@ export default function SeeMore({ goal }) {
                	<Line name="Jonny P." type="monotone" dataKey="pv" stroke="#82ca9d" />
                	<ReferenceLine y={goal["minimum"]} label="Goal" stroke="green" strokeDasharray='5 5'  />
               </LineChart>
+              :
+              (showView === "BAR") ?
+              <BarChart 
+                width={500} 
+                height={300} 
+                data={goalData}
+                margin={{
+                  top: 5, right: 30, left: 30, bottom: 30,
+                }}
+                className={classes.form}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name">
+                  <Label value="Days" offset={0} position="bottom" />
+                </XAxis>
+                <YAxis className={classes.yaxis} label={{value: goal.metric, angle: -90, position: 'left'}}/>
+                <Tooltip />
+                <Legend verticalAlign="top" height={36}/>
+                <Bar name="Suzy Q." dataKey="pv" fill="#8884d8" />
+                <Bar name="Jonny P." dataKey="uv" fill="#82ca9d" />
+                <ReferenceLine y={goal["minimum"]} label="Goal" stroke="green" strokeDasharray='5 5'  />
+              </BarChart>
+              :
+              <AreaChart 
+                width={500} 
+                height={300} 
+                data={goalData}
+                margin={{
+                  top: 5, right: 30, left: 30, bottom: 30,
+                }}
+                className={classes.form}
+              >
+                <defs>
+                  <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
+                  </linearGradient>
+                  <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor="#82ca9d" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <XAxis dataKey="name">
+                  <Label value="Days" offset={0} position="bottom" />
+                </XAxis>
+                <YAxis className={classes.yaxis} label={{value: goal.metric, angle: -90, position: 'left'}}/>
+                <CartesianGrid strokeDasharray="3 3" />
+                <Tooltip />
+                <Legend verticalAlign="top" height={36}/>
+                <Area name="Suzy Q." type="monotone" dataKey="uv" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)" />
+                <Area name="Jonny P." type="monotone" dataKey="pv" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" />
+                <ReferenceLine y={goal["minimum"]} label="Goal" stroke="green" strokeDasharray='5 5'  />
+              </AreaChart>}
             </div>
           </div>
         </DialogContent>
