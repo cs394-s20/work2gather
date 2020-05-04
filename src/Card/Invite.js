@@ -23,6 +23,7 @@ const useStyles = makeStyles({
 
 const Invite = ({ goal, user }) => {
   const [progress, setProgress] = useState(0);
+  const [creatorName, setCreatorName] = useState('');
 
   const classes = useStyles();
   
@@ -81,6 +82,21 @@ const Invite = ({ goal, user }) => {
     alert("reject!");
   };
 
+  useEffect(() => {
+    const setCreatorNameCallback = (snap) => {
+      if (snap.val()) {
+        setCreatorName(
+          snap.val()[goal["groupMembers"]["creator"]]["name"]//.split(" ")[0]
+        )
+      }
+    };
+    const dbUsers = firebase.database().ref("users");
+    dbUsers.on("value", setCreatorNameCallback, (error) => alert(error));
+    return () => {
+      dbUsers.off("value", setCreatorNameCallback);
+    };
+  }, []);
+
   return (
     <Card className={classes.root}>
       <CardContent>
@@ -90,7 +106,7 @@ const Invite = ({ goal, user }) => {
           </Typography>
           <Typography className={classes.pos} color="textSecondary">
             <br></br>
-            Invite From: {goal["groupMembers"]["creator"]}
+            Invite From: {creatorName}
             <br></br>
             Start Date: {goal["startDate"]}
             <br></br>
