@@ -437,6 +437,7 @@ const Goal = ({ goal, user }) => {
             </h4>
             <br></br>
             {goal.deleted?<p>Your friend has removed the goal.</p>:null}
+            {goal.rejected? <p> Your friend has rejected the goal invite. </p> : null}
             <Container style={{ marginLeft: "auto", marginRight: "auto" }}>
               <Typography id="discrete-slider" gutterBottom>
                 Daily Goal: {goal["minimum"]} {goal["metric"]}

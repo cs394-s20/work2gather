@@ -86,6 +86,7 @@ const AddGoal = ({ open, user, setOpen, emailTouid }) => {
 
         var newData = {
           deleted: false,
+          rejected: false, 
           confirmed: false,
           key: key,
           title: title,

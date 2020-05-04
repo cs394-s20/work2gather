@@ -75,6 +75,9 @@ const Invite = ({ goal, user }) => {
 
   const reject = () => {
     //delete goals
+    db.child("goals").child(goal["key"]).child("confirmed").set(true);
+    db.child("users").child(goal["groupMembers"]["invitee"]).child("invites").child(goal["key"]).set(null);
+    db.child("goals").child(goal["key"]).child("rejected").set(true);
     alert("reject!");
   };
 
