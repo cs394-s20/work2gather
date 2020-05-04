@@ -86,7 +86,7 @@ const Invite = ({ goal, user }) => {
     const setCreatorNameCallback = (snap) => {
       if (snap.val()) {
         setCreatorName(
-          snap.val()[goal["groupMembers"]["creator"]]["name"]//.split(" ")[0]
+          snap.val()[goal["groupMembers"]["creator"]]["name"]
         )
       }
     };
