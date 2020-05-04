@@ -6,6 +6,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import firebase from "../shared/firebase";
+
 import {
   LineChart, Label, ReferenceLine, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
 } from 'recharts';
@@ -28,6 +30,8 @@ export default function SeeMore({ goal }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [goalData, setGoalData] = useState([]);
+  const [creatorName, setCreatorName] = useState([]);
+  const [inviteeName, setInviteeName] = useState([]);
 
   const getDayOn = () => {
     var startdate = new Date(goal["startDate"]);
@@ -58,6 +62,25 @@ export default function SeeMore({ goal }) {
     }
     setGoalData(tempData);
   }, [goal]);
+
+  useEffect(() => {
+    const setGoalUserNames = (snap) => {
+      if (snap.val()) {
+        setCreatorName(
+          snap.val()[goal["groupMembers"]["creator"]]["name"].split(" ")[0]
+        );
+        setInviteeName(
+          snap.val()[goal["groupMembers"]["invitee"]]["name"].split(" ")[0]
+        );
+      }
+    };
+
+    const dbUsers = firebase.database().ref("users");
+    dbUsers.on("value", setGoalUserNames, (error) => alert(error));
+    return () => {
+      dbUsers.off("value", setGoalUserNames);
+    };
+  });
 
   return (
     <React.Fragment>
@@ -109,8 +132,8 @@ export default function SeeMore({ goal }) {
         	  	  <YAxis className={classes.yaxis} label={{ value: goal.metric, angle: -90, position: 'left'}} />
                 <Tooltip />
         			  <Legend verticalAlign="top" height={36}/>
-                <Line name="Suzy Q." type="monotone" dataKey="uv" stroke="#8884d8" activeDot={{ r: 8 }} />
-               	<Line name="Jonny P." type="monotone" dataKey="pv" stroke="#82ca9d" />
+                <Line name={creatorName} type="monotone" dataKey="uv" stroke="#8884d8" activeDot={{ r: 8 }} />
+               	<Line name={inviteeName} type="monotone" dataKey="pv" stroke="#82ca9d" />
                	<ReferenceLine y={goal["minimum"]} label="Goal" stroke="green" strokeDasharray='5 5'  />
               </LineChart>
             </div>
