@@ -88,6 +88,8 @@ const AddGoal = ({ open, user, setOpen, emailTouid }) => {
           deleted: false,
           rejected: false, 
           confirmed: false,
+          archivedCreator: false, 
+          archivedInvitee: false, 
           key: key,
           title: title,
           description: description,

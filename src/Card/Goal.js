@@ -308,6 +308,17 @@ const Goal = ({ goal, user }) => {
     // db.child('goals').child(goal.key).set(null);
   }
 
+  const archiveGoal = () => {
+    if(user.uid===goal.groupMembers.creator) {
+      db.child('goals').child(goal.key).child('archivedCreator').set(true);
+    }
+    else {
+      db.child('goals').child(goal.key).child('archivedInvitee').set(true);
+    }
+    setOpen(false);
+    // db.child('goals').child(goal.key).set(null);
+  }
+
   return (
     <Badge
       anchorOrigin={{ vertical: "top", horizontal: "left" }}
@@ -334,6 +345,7 @@ const Goal = ({ goal, user }) => {
           </DialogContent>
           <DialogActions>
             <Button onClick={()=>setOpen(false)}>Cancel</Button>
+            {goal.confirmed? <Button onClick={archiveGoal}>Archive</Button> : null}
             <Button onClick={deleteGoal}>Delete</Button>
           </DialogActions>
         </Dialog>

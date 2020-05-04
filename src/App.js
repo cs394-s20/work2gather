@@ -11,6 +11,11 @@ import AddGoal from './AddGoal';
 import GoalGrid from './GoalGrid';
 import firebase from './shared/firebase'
 import ToggleButtons from './Toggle'
+import Badge from '@material-ui/core/Badge'; 
+import MailIcon from '@material-ui/icons/Mail'; 
+import HomeIcon from '@material-ui/icons/Home'; 
+import ArchiveIcon from '@material-ui/icons/Archive'; 
+import IconButton from '@material-ui/core/IconButton'; 
 
 const db = firebase.database().ref();
 
@@ -27,10 +32,14 @@ const uiConfig = {
 const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
+  },
+  icons:{
+    margin:"5px",
+    color: "white"
   }
 }));
 
-const Welcome = ({ user }) => {
+const Welcome = ({ user, invites, setGridView}) => {
   const classes = useStyles();
   return (
     <React.Fragment>
@@ -39,7 +48,26 @@ const Welcome = ({ user }) => {
           <Typography variant="h5" className={classes.title}>
             Work2Gather
           </Typography>
-          <Typography variant="h6" style={{ float: "center", marginRight: 30 }}>
+          <IconButton>
+            <HomeIcon className={classes.icons} onClick={() => setGridView("ACTIVE")}/>
+          </IconButton>
+          <IconButton>
+            <Badge 
+              anchorOrigin={{
+                 vertical: 'top',
+                horizontal: 'left',
+              }} 
+              badgeContent={invites.length} 
+              color="secondary"
+              className={classes.icons}>
+              <MailIcon onClick={() => setGridView("INVITES")}/>
+            </Badge>
+          </IconButton>
+          <IconButton>
+            <ArchiveIcon className={classes.icons} onClick={() => setGridView("ARCHIVE")}/>
+          </IconButton>
+
+          <Typography variant="h6" style={{ marginLeft:"10px", float: "center", marginRight: 30 }}>
             Welcome, {user.displayName ? user.displayName.split(' ')[0] : ""}
           </Typography>
           <Button style={{ fontSize: 21 }} color="inherit" onClick={() => firebase.auth().signOut()}>
@@ -58,9 +86,9 @@ const SignIn = () => (
   />
 );
 
-const Banner = ({ user, title }) => (
+const Banner = ({ user, invites, title, setGridView }) => (
   <React.Fragment>
-    {user ? <Welcome user={user} /> : <SignIn />}
+    {user ? <Welcome user={user} invites={invites} setGridView={setGridView}/> : <SignIn />}
   </React.Fragment>
 );
 
@@ -70,6 +98,7 @@ const App = () => {
   const [user, setUser] = useState({});
   const [emailTouid, setEmailTouid] = useState({});
   const [open, setOpen] = useState(false);
+  const [gridView, setGridView] = useState("ACTIVE");
 
   var goals = Object.values(goalsJSON);
 
@@ -114,12 +143,12 @@ const App = () => {
 
   return (
     <div>
-      <Banner user={user} title="Work2Gather">
+      <Banner user={user} invites={invites} title="Work2Gather" setGridView={setGridView}>
       </Banner>
       <br></br>
       {user ? <AddGoal open={open} user={user} setOpen={setOpen} emailTouid={emailTouid} /> : null}
       {user ? <Container maxWidth="xl">
-        <GoalGrid goals={goals} invites={invites} user={user} />
+        <GoalGrid goals={goals} invites={invites} user={user} gridView={gridView}/>
       </Container> : null}
     </div>
   );
