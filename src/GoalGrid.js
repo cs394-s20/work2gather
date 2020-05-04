@@ -57,7 +57,7 @@ const GoalGrid = ({ goals, invites, user }) => {
       <Grid container className={classes.gridcontainer} spacing={3} direction="row" justify="flex-start">
         <Grid item xs={12} className={classes.griditem}>
           <div>
-            <div style={{ float: 'left' }}><Typography variant="h4">To-Do Goals</Typography></div>
+            <div style={{ float: 'left' }}><Typography variant="h4">Active Goals</Typography></div>
             <div style={{ float: 'right' }}>{user ? <ToggleButtons showGoals={showGoals} setShowGoals={setShowGoals}></ToggleButtons> : null}</div></div>
         </Grid>
         {(showGoals === 'ALL') ? unfinished.map(goals =>

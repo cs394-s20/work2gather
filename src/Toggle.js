@@ -6,8 +6,11 @@ import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 
 const useStyles = makeStyles((theme) => ({
     toggleContainer: {
-        margin: theme.spacing(2, 0),
+        width:"250px"
     },
+    togglebutton:{
+        width: "100px"
+    }
 }));
 
 const ToggleButtons = ({ showGoals, setShowGoals }) => {
@@ -22,21 +25,20 @@ const ToggleButtons = ({ showGoals, setShowGoals }) => {
     return (
         <Grid container spacing={2}>
             <Grid item sm={12} md={6}>
-                <div className={classes.toggleContainer}>
                     <ToggleButtonGroup
                         value={showGoals}
                         exclusive
                         onChange={handleShowGoals}
                         aria-label="text alignment"
+                        className={classes.toggleContainer}
                     >
-                        <ToggleButton value="ALL" aria-label="centered">
-                            Show All
+                        <ToggleButton value="ALL" aria-label="centered" >
+                            <div className={classes.toggleButton}> Show All </div>
                         </ToggleButton>
-                        <ToggleButton value="TODO" aria-label="centered">
-                            Show To-Do
+                        <ToggleButton value="TODO" aria-label="centered" className={classes.toggleButton}>
+                            <div className={classes.toggleButton}> Show To-Do </div>
                         </ToggleButton>
                     </ToggleButtonGroup>
-                </div>
             </Grid>
         </Grid>
     );
