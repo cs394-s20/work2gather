@@ -41,6 +41,9 @@ const useStyles = makeStyles((theme) => ({
 
 const Welcome = ({ user, invites, setGridView}) => {
   const classes = useStyles();
+  let count = 0;
+  Object.values(invites).map(goal=>goal.confirmed?null:count++);
+
   return (
     <React.Fragment>
       <AppBar position="static">
@@ -57,7 +60,7 @@ const Welcome = ({ user, invites, setGridView}) => {
                  vertical: 'top',
                 horizontal: 'left',
               }} 
-              badgeContent={invites.length} 
+              badgeContent={count} 
               color="secondary"
               className={classes.icons}>
               <MailIcon onClick={() => setGridView("INVITES")}/>
@@ -70,7 +73,7 @@ const Welcome = ({ user, invites, setGridView}) => {
           <Typography variant="h6" style={{ marginLeft:"10px", float: "center", marginRight: 30 }}>
             Welcome, {user.displayName ? user.displayName.split(' ')[0] : ""}
           </Typography>
-          <Button style={{ fontSize: 21 }} color="inherit" onClick={() => firebase.auth().signOut()}>
+          <Button style={{ fontSize: 21 }} color="inherit" onClick={() => { setGridView("ACTIVE"); firebase.auth().signOut() }}>
             Log out
           </Button>
         </Toolbar>
