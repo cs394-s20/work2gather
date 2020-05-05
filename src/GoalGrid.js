@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Goal from './Card/Goal'
+import ArchiveCard from './Card/ArchiveCard'
 import Invite from './Card/Invite'
 import ToggleButtons from './Toggle'
 
@@ -112,7 +113,7 @@ const GoalGrid = ({ goals, invites, user, gridView}) => {
           <Grid item xs={12} className={classes.griditem}><Typography variant="h4">Archive</Typography></Grid>
           {unfinished.map(goals => checkArchive(user.uid, goals) ?
             <Grid item className={classes.carditem}>
-              <Goal goal={goals} user={user} key={goals.key} />
+              <ArchiveCard goal={goals} user={user} key={goals.key} />
             </Grid> : null)
           }
       </Grid>}

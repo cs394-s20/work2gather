@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SeeMore({ goal }) {
+export default function SeeMore({ goal, buttonText }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [goalData, setGoalData] = useState([]);
@@ -88,8 +88,8 @@ export default function SeeMore({ goal }) {
     <React.Fragment>
       <div>
         <div>
-          <Button  size="small" variant="outlined" color="primary" onClick={handleClickOpen}>
-            See More
+          <Button  size="medium" variant="contained" color="primary" onClick={handleClickOpen}>
+            {buttonText ? buttonText : 'See More'}
           </Button>
         </div>
         <div>

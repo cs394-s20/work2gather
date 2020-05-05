@@ -54,12 +54,12 @@ const Welcome = ({ user, invites, setGridView}) => {
             Work2Gather
           </Typography>
           <Tooltip title="Home">
-            <IconButton>
-              <HomeIcon className={classes.icons} onClick={() => setGridView("ACTIVE")}/>
+            <IconButton onClick={() => setGridView("ACTIVE")}>
+              <HomeIcon className={classes.icons} />
             </IconButton>
           </Tooltip>
           <Tooltip title="Invites">
-            <IconButton>
+            <IconButton onClick={() => setGridView("INVITES")}>
               <Badge 
                 anchorOrigin={{
                    vertical: 'top',
@@ -68,16 +68,16 @@ const Welcome = ({ user, invites, setGridView}) => {
                 badgeContent={count} 
                 color="secondary"
                 className={classes.icons}>
-                <MailIcon onClick={() => setGridView("INVITES")}/>
+                <MailIcon />
               </Badge>
             </IconButton>
           </Tooltip>
           <Tooltip title="Archive">
-            <IconButton>
-              <ArchiveIcon className={classes.icons} onClick={() => setGridView("ARCHIVE")}/>
+            <IconButton  onClick={() => setGridView("ARCHIVE")}>
+              <ArchiveIcon className={classes.icons}/>
             </IconButton>
           </Tooltip>
-
+          
           <Typography variant="h6" style={{ marginLeft:"10px", float: "center", marginRight: 30 }}>
             Welcome, {user.displayName ? user.displayName.split(' ')[0] : ""}
           </Typography>
