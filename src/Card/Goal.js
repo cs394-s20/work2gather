@@ -95,6 +95,11 @@ const useStyles = makeStyles({
     width: "50px",
     backgroundColor: "#14ECF5",
   },
+  update:{
+    display:"flex",
+    justifyContent: "center",
+    flexDirection: "column",
+  },
   shape1: {
     backgroundColor: "#14ECF5",
     opacity: 0.5,
@@ -351,7 +356,7 @@ const Goal = ({ goal, user }) => {
       >
         <Dialog open={open} onClose={()=>setOpen(false)}>
           <DialogContent>
-            Are you sure you want to delete this goal?
+            Are you sure you want to archive or delete this goal?
           </DialogContent>
           <DialogActions>
             <Button onClick={()=>setOpen(false)}>Cancel</Button>
@@ -450,54 +455,47 @@ const Goal = ({ goal, user }) => {
               />
             </div>
 
-            <h4
-              className={classes.marginless}
-              style={{ marginTop: "10px" }}
-              align="center"
-            >
-              Day {getDayOn()}         
-            </h4>
-            <br></br>
-            {goal.deleted?<p>Your friend has removed the goal.</p>:null}
-            {goal.rejected? <p> Your friend has rejected the goal invite. </p> : null}
-            <Container style={{ marginLeft: "auto", marginRight: "auto" }}>
-              <Typography id="discrete-slider" gutterBottom>
+            <CardActions className={classes.update}>
+              <Typography>
+                <b>Day {getDayOn()} </b>
+              </Typography>
+              {(goal.deleted||goal.rejected)?<Typography>{goal.rejected? "Your friend has rejected the goal invite." :"Your friend has removed the goal."}</Typography>:<div style={{height:'23px'}}></div>}
+              <Typography >
                 Daily Goal: {goal["minimum"]} {goal["metric"]}
               </Typography>
-              {goal["goalType"] === "Quantitative" ? <TextField
+              {goal["goalType"] === "Quantitative" ? 
+              <TextField
                 variant="outlined"
                 type="number"
                 onChange={saveProgress}
                 defaultValue={progress}
-              /> : <div style={{height:'61px'}}></div> }
-            </Container>
-
-            {/* <Slider
-            style={{ width: "95%", marginLeft: "2%", float: "center" }}
-            defaultValue={5}
-            getAriaValueText={(value) => value}
-            aria-labelledby="discrete-slider"
-            valueLabelDisplay="auto"
-            step={1}
-            onChange={handleSliderChange}
-            marks
-            min={0}
-            max={15}
-            /> */}
-
-            <CardActions>
+                size="small"
+                style={{ width: "176px" }}
+              /> : <div style={{height:'40px'}}></div> }
               <Button
                 size="medium"
                 variant="contained"
                 color="primary"
-                style={{ marginTop: "5px", marginLeft: "23.5px" }}
+                style={{ marginTop: "10px" }}
                 onClick={updateProgress}
               >
                  {goal["goalType"] === "Quantitative" ? 'Update Progress' : 'Mark Complete' } 
               </Button>
             </CardActions>
 
-            <div style={{padding:"5px", marginTop:"20px", marginBottom:"20px"}}>
+            <CardActions style={{marginBottom:'-15px'}}>
+              <Button
+                size="medium"
+                variant="contained"
+                color="secondary"
+                onClick={setReminder}
+                style={{width:"56%"}}
+              >
+                Remind Friend
+              </Button>
+              <SeeMore goal={goal}/>
+            </CardActions>
+            {/* <div style={{ marginTop:"5px", marginBottom:"30px"}}>
               <div style={{float:"left", marginRight: "10px"}}>
                 <Button
                     size="medium"
@@ -511,7 +509,7 @@ const Goal = ({ goal, user }) => {
               <div style={{float:"right"}}>
                 <SeeMore goal={goal} />
               </div>
-            </div>
+            </div> */}
           </CardContent>
         </Card>
       </Badge>

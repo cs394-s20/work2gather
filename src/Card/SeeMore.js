@@ -88,7 +88,12 @@ export default function SeeMore({ goal, buttonText }) {
     <React.Fragment>
       <div>
         <div>
-          <Button  size="medium" variant="contained" color="primary" onClick={handleClickOpen}>
+          <Button  
+            size="medium" 
+            variant="contained" 
+            color="primary" 
+            style={{width:"150px"}}
+            onClick={handleClickOpen}>
             {buttonText ? buttonText : 'See More'}
           </Button>
         </div>
