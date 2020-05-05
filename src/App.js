@@ -16,6 +16,8 @@ import MailIcon from '@material-ui/icons/Mail'; 
 import HomeIcon from '@material-ui/icons/Home'; 
 import ArchiveIcon from '@material-ui/icons/Archive'; 
 import IconButton from '@material-ui/core/IconButton'; 
+import Tooltip from '@material-ui/core/Tooltip';
+
 
 const db = firebase.database().ref();
 
@@ -51,24 +53,30 @@ const Welcome = ({ user, invites, setGridView}) => {
           <Typography variant="h5" className={classes.title}>
             Work2Gather
           </Typography>
-          <IconButton>
-            <HomeIcon className={classes.icons} onClick={() => setGridView("ACTIVE")}/>
-          </IconButton>
-          <IconButton>
-            <Badge 
-              anchorOrigin={{
-                 vertical: 'top',
-                horizontal: 'left',
-              }} 
-              badgeContent={count} 
-              color="secondary"
-              className={classes.icons}>
-              <MailIcon onClick={() => setGridView("INVITES")}/>
-            </Badge>
-          </IconButton>
-          <IconButton>
-            <ArchiveIcon className={classes.icons} onClick={() => setGridView("ARCHIVE")}/>
-          </IconButton>
+          <Tooltip title="Home">
+            <IconButton>
+              <HomeIcon className={classes.icons} onClick={() => setGridView("ACTIVE")}/>
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Invites">
+            <IconButton>
+              <Badge 
+                anchorOrigin={{
+                   vertical: 'top',
+                  horizontal: 'left',
+                }} 
+                badgeContent={count} 
+                color="secondary"
+                className={classes.icons}>
+                <MailIcon onClick={() => setGridView("INVITES")}/>
+              </Badge>
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Archive">
+            <IconButton>
+              <ArchiveIcon className={classes.icons} onClick={() => setGridView("ARCHIVE")}/>
+            </IconButton>
+          </Tooltip>
 
           <Typography variant="h6" style={{ marginLeft:"10px", float: "center", marginRight: 30 }}>
             Welcome, {user.displayName ? user.displayName.split(' ')[0] : ""}
