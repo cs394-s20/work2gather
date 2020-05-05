@@ -251,13 +251,23 @@ const Goal = ({ goal, user }) => {
     if (progress === "") {
       alert("Not a number");
     } else {
-      db.child("goals")
-        .child(goal["key"])
-        .child("progress")
-        .child(user.uid)
-        .child(onDayNum)
-        .set(parseInt(progress));
-      setCheckedIn(true);
+      if (goal['goalType'] == 'Quantitative'){
+        db.child("goals")
+          .child(goal["key"])
+          .child("progress")
+          .child(user.uid)
+          .child(onDayNum)
+          .set(parseInt(progress));
+        setCheckedIn(true);
+      } else {
+        db.child("goals")
+          .child(goal["key"])
+          .child("progress")
+          .child(user.uid)
+          .child(onDayNum)
+          .set(1);
+        setCheckedIn(true);
+      }
     }
   };
 
@@ -454,12 +464,12 @@ const Goal = ({ goal, user }) => {
               <Typography id="discrete-slider" gutterBottom>
                 Daily Goal: {goal["minimum"]} {goal["metric"]}
               </Typography>
-              <TextField
+              {goal["goalType"] === "Quantitative" ? <TextField
                 variant="outlined"
                 type="number"
                 onChange={saveProgress}
                 defaultValue={progress}
-              />
+              /> : <div style={{height:'61px'}}></div> }
             </Container>
 
             {/* <Slider
@@ -483,14 +493,14 @@ const Goal = ({ goal, user }) => {
                 style={{ marginTop: "5px", marginLeft: "23.5px" }}
                 onClick={updateProgress}
               >
-                Update Progress
+                 {goal["goalType"] === "Quantitative" ? 'Update Progress' : 'Mark Complete' } 
               </Button>
             </CardActions>
 
             <div style={{padding:"5px", marginTop:"20px", marginBottom:"20px"}}>
               <div style={{float:"left", marginRight: "10px"}}>
                 <Button
-                    size="small"
+                    size="medium"
                     variant="contained"
                     color="secondary"
                     onClick={setReminder}

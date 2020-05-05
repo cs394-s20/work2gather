@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
@@ -10,11 +10,55 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
+  import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import Input from '@material-ui/core/Input';
+import NativeSelect from '@material-ui/core/NativeSelect';
+import InputBase from '@material-ui/core/InputBase';
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 import firebase from "./shared/firebase";
+
+
+
+const BootstrapInput = withStyles((theme) => ({
+  root: {
+    'label + &': {
+      marginTop: theme.spacing(3),
+    },
+  },
+  input: {
+    borderRadius: 4,
+    position: 'relative',
+    backgroundColor: theme.palette.background.paper,
+    border: '1px solid #ced4da',
+    fontSize: 16,
+    padding: '10px 26px 10px 12px',
+    transition: theme.transitions.create(['border-color', 'box-shadow']),
+    // Use the system font instead of the default Roboto font.
+    fontFamily: [
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+    '&:focus': {
+      borderRadius: 4,
+      borderColor: '#80bdff',
+      boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
+    },
+  },
+}))(InputBase);
 
 const db = firebase.database().ref();
 
@@ -32,6 +76,7 @@ const AddGoal = ({ open, user, setOpen, emailTouid }) => {
   const [minimum, setMinimum] = useState();
   const [duration, setDuration] = useState();
   const [email, setEmail] = useState();
+  const [goalType, setGoalType] = useState("");
   const classes = useStyles();
 
   const handleOpen = () => {
@@ -45,6 +90,7 @@ const AddGoal = ({ open, user, setOpen, emailTouid }) => {
     setMetric();
     setMinimum();
     setDuration();
+    setGoalType('');
     setEmail();
   };
 
@@ -58,18 +104,20 @@ const AddGoal = ({ open, user, setOpen, emailTouid }) => {
       title === undefined ||
       description === undefined ||
       metric === undefined ||
-      minimum === undefined ||
+      (minimum === undefined && goalType === "Quantitative") ||
       duration === undefined ||
       email === undefined ||
       title === "" ||
       description === "" ||
       metric === "" ||
-      minimum === "" ||
+      (minimum === "" && goalType === "Quantitative") ||
       duration === "" ||
-      email === ""
+      email === "" || 
+      goalType == ""
     ) {
       alert("Please fill in all fields.");
     } else {
+      
       let rg = /\./g;
       let temp = email.replace(rg, ",");
       if (!emailTouid[temp]) {
@@ -95,11 +143,12 @@ const AddGoal = ({ open, user, setOpen, emailTouid }) => {
           description: description,
           startDate: timeNow,
           duration: duration,
+          goalType: goalType,
           groupMembers: {
             creator: user.uid,
             invitee: emailTouid[temp],
           },
-          minimum: minimum,
+          minimum: goalType === "Quantitative" ? minimum : "1",
           metric: metric,
           progress: {
             [user.uid]: {
@@ -128,6 +177,17 @@ const AddGoal = ({ open, user, setOpen, emailTouid }) => {
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
+  };
+
+  const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250
+      }
+    }
   };
 
   return (
@@ -173,6 +233,29 @@ const AddGoal = ({ open, user, setOpen, emailTouid }) => {
             onChange={(event) => setMetric(event.target.value)}
             placeholder="What unit will you measure everyday? (e.g. pushups done, minutes spent)"
           />
+          <FormControl className={classes.formControl} style={{width:'100%'}}>
+            <InputLabel id="demo-mutiple-name-label">Goal Type</InputLabel>
+            <Select 
+
+              labelId="demo-mutiple-name-label"
+              id="demo-mutiple-name"
+              value={goalType}
+              style={{width:'100%'}}
+              onChange={(event) => setGoalType(event.target.value)}
+              input={<Input style={{width:'100%'}}/>}
+              MenuProps={MenuProps}
+            >
+              {['Quantitative', 'Qualitative'].map(name => (
+                <MenuItem
+                  key={name}
+                  value={name}
+                >
+                  {name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          { goalType === 'Qualitative' ? <React.Fragment></React.Fragment> :
           <TextField
             margin="dense"
             label="Daily Minimum"
@@ -180,7 +263,7 @@ const AddGoal = ({ open, user, setOpen, emailTouid }) => {
             onChange={(event) => setMinimum(event.target.value)}
             placeholder="How much do you need to do to complete your daily goal? (e.g. 10)"
             type="number"
-          />
+          /> }
           <TextField
             margin="dense"
             label="Goal Duration"
