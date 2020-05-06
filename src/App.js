@@ -50,7 +50,7 @@ const Welcome = ({ user, invites, setGridView}) => {
     <React.Fragment>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h5" className={classes.title}>
+          <Typography variant="h5" className={classes.title} onClick={() => {window.location.reload(false)}}>
             Work2Gather
           </Typography>
           <Tooltip title="Home">

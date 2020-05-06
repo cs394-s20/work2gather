@@ -11,7 +11,8 @@ const db = firebase.database().ref();
 
 const useStyles = makeStyles({
   root: {
-    width:"280px"
+    width:"280px",
+    boxShadow: "3px 3px 25px 2px rgba(0,0,0,0.5)",
   },
   title: {
     fontSize: 14,
