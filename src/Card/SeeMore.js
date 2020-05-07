@@ -6,6 +6,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import ProgressGrid from "./ProgressGrid";
 import firebase from "../shared/firebase";
 
 import {
@@ -31,7 +32,7 @@ export default function SeeMore({ goal, buttonText }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [goalData, setGoalData] = useState([]);
-  const [showView, setShowView] = React.useState('LINE');
+  const [showView, setShowView] = React.useState('BAR');
   const [creatorName, setCreatorName] = useState([]);
   const [inviteeName, setInviteeName] = useState([]);
 
