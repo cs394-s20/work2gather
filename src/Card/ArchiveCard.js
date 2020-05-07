@@ -32,12 +32,13 @@ const useStyles = makeStyles({
   root: {
     margin: "auto",
     minWidth: "35%",
+    boxShadow: "3px 3px 25px 2px rgba(0,0,0,0.5)",
     // marginLeft: "5%",
     // marginRight: "5%",
     // overflow: "auto",
     // marginTop: "50px",
     // display: "inline-block",
-    border: "1px solid black"
+    // border: "1px solid black"
   },
   title: {
     fontSize: 14,
