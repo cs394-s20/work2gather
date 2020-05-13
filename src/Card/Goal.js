@@ -155,25 +155,13 @@ const Goal = ({ goal, user }) => {
   const classes = useStyles();
 
   useEffect(() => {
-    const setGoalUserNames = (snap) => {
-      if (snap.val()) {
-        setCreatorName(
-          snap.val()[goal["groupMembers"]["creator"]]["name"].split(" ")[0]
-        );
-        setInviteeName(
-          snap.val()[goal["groupMembers"]["invitee"]]["name"].split(" ")[0]
-        );
-      }
-    };
-
-    const dbUsers = firebase.database().ref("users");
-    dbUsers.on("value", setGoalUserNames, (error) => alert(error));
-    return () => {
-      dbUsers.off("value", setGoalUserNames);
-    };
 
     let users = Object.keys(goal["progress"]);
     for (let j = 0; j <= getDayOn(); j++) {
+      console.log(users[0])
+      console.log(users[1])
+      console.log(goal["progress"][users[0]][j])
+      console.log(goal["progress"][users[1]][j])
       if (goal["progress"][users[0]][j] == undefined) {
         db.child("goals")
           .child(goal["key"])
@@ -193,6 +181,23 @@ const Goal = ({ goal, user }) => {
         //console.log("updating db for goal " + goal.key + " for user " + users[1]);
       }
     }
+
+    const setGoalUserNames = (snap) => {
+      if (snap.val()) {
+        setCreatorName(
+          snap.val()[goal["groupMembers"]["creator"]]["name"].split(" ")[0]
+        );
+        setInviteeName(
+          snap.val()[goal["groupMembers"]["invitee"]]["name"].split(" ")[0]
+        );
+      }
+    };
+
+    const dbUsers = firebase.database().ref("users");
+    dbUsers.on("value", setGoalUserNames, (error) => alert(error));
+    return () => {
+      dbUsers.off("value", setGoalUserNames);
+    };
   }, []);
 
   useEffect(() => {
